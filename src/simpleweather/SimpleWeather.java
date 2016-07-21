@@ -24,7 +24,7 @@ import com.dalsemi.onewire.container.*;
 public class SimpleWeather
 {
   // user constants
-  public static final String VERSION = "SimpleWeather 2.0.3 20.07.2016";
+  public static final String VERSION = "SimpleWeather 2.0.4 21.07.2016";
   public static String ONE_WIRE_SERIAL_PORT; 
   public static final String LOG_PATHNAME = "WeatherLog.csv";
   
@@ -231,7 +231,7 @@ public class SimpleWeather
         System.out.println("");
         System.out.println("Time = " + date);
 	measurement += 1;
-        System.out.println("ts = " + timestamp + ", measurement number = "+ measurement);
+        System.out.println("ts = " + timestamp + ", measurement number = "+ measurement + " In q: " + wu.getCount());
         
         // get the weather
         if (ts1ex) {
@@ -325,9 +325,10 @@ public class SimpleWeather
 	if (rs1ex) {
         	rain = rs1.getRainCount();
         	System.out.println("Rain = " + rain + " in");
-        	pulse = rs1.getPulseCount();
-        	System.out.println("Pulse = " + pulse + " ");
-	}        
+//        	pulse = rs1.getPulseCount();
+//        	System.out.println("Pulse = " + pulse + " ");
+	}  
+        
 	// temperature control 
 	// keeping temp22 between TEMP_LOW and TEMP_HIGH
     	if ((relayex) && (ts22ex)) {

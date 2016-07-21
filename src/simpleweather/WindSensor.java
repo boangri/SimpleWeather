@@ -86,7 +86,7 @@ public class WindSensor
           windSpeed = (float)(currentCount-lastCount)/(float)(currentTicks-lastTicks)*1000f*6.28f*radius;
         }
         
-        //if (debugFlag)
+        if (debugFlag)
           System.out.println("Count = " + (currentCount-lastCount) + " during " +
                   (currentTicks-lastTicks) + "ms calcs to " + windSpeed + " radius="+radius);
         

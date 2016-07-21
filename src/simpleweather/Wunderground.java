@@ -36,6 +36,10 @@ public class Wunderground implements Runnable {
         t.start();
     }
 
+    public int getCount() {
+        return fifo.getCount();
+    }
+    
     public void send(SimpleWeather sw, WeatherCruncher wc) {
         //String url = "weatherstation.wunderground.com";
         StringBuffer sendUrl = new StringBuffer();

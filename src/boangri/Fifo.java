@@ -17,5 +17,6 @@ package boangri;
 public interface Fifo {
     public void push(Object o);
     public Object pop();
+    public int getCount();
 }
 

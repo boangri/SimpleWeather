@@ -65,4 +65,8 @@ public class MyFifo implements Fifo {
             return head.getObject();
         }
     }    
+    
+    synchronized public int getCount() {
+        return count;
+    }
 }
