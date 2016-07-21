@@ -23,7 +23,8 @@ import com.dalsemi.onewire.container.*;
 public class WindSensor
 {
   // calibration constants
-  private static int NORTH_OFFSET = Integer.parseInt(SimpleWeather.NORTH_OFFSET);
+  private static final float radius = Float.parseFloat(SimpleWeather.WIND_RADIUS); // effective radius of the wheel
+  private static final int NORTH_OFFSET = Integer.parseInt(SimpleWeather.NORTH_OFFSET);
   
   // class variables
   private DSPortAdapter adapter;
@@ -31,14 +32,13 @@ public class WindSensor
   private long lastTicks = 0;
   private OneWireContainer1D   windSpdDevice = null;
   private OneWireContainer20   windDirDevice = null;
-  public float windSpeed;
-  public int windDir;
+  public float windSpeed = 0f;
+  public int windDir = 16;
   private float sumWind, windHi, windPk;
   private int samples;
   private double sumSin, sumCos;
-  private static boolean debugFlag = SimpleWeather.debugFlag;
+  private static final boolean debugFlag = SimpleWeather.debugFlag;
  
-  
   public WindSensor(DSPortAdapter adapter, String windSpdDeviceID, String windDirDeviceID)
   {
     // get instances of the 1-wire devices
@@ -82,12 +82,13 @@ public class WindSensor
         {
           // calculate the wind speed based on the revolutions per second
           //windSpeed = ((currentCount-lastCount)/((currentTicks-lastTicks)/1000f)) / 2.0f * 2.453f;   // MPH
-          windSpeed = ((currentCount-lastCount)/((currentTicks-lastTicks)/1000f)) / 2.0f * 2.453f * 1609.0f / 3600.0f;   // Met/sec
+          //windSpeed = ((currentCount-lastCount)/((currentTicks-lastTicks)/1000f)) / 2.0f * 2.453f * 1609.0f / 3600.0f;   // Met/sec
+          windSpeed = (float)(currentCount-lastCount)/(float)(currentTicks-lastTicks)*1000f*6.28f*radius;
         }
         
-        if (debugFlag)
+        //if (debugFlag)
           System.out.println("Count = " + (currentCount-lastCount) + " during " +
-                  (currentTicks-lastTicks) + "ms calcs to " + windSpeed);
+                  (currentTicks-lastTicks) + "ms calcs to " + windSpeed + " radius="+radius);
         
         // remember count & time
         lastCount = currentCount;
@@ -259,7 +260,7 @@ public class WindSensor
   }
   
   public void update()
-  {
+  { 
     if (windDir == 16) return;
     
     // increment the sample counter

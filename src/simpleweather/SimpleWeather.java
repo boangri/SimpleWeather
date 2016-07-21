@@ -24,13 +24,12 @@ import com.dalsemi.onewire.container.*;
 public class SimpleWeather
 {
   // user constants
-  public static final String VERSION = "SimpleWeather 2.0.1 24.02.2010";
+  public static final String VERSION = "SimpleWeather 2.0.3 20.07.2016";
   public static String ONE_WIRE_SERIAL_PORT; 
   public static final String LOG_PATHNAME = "WeatherLog.csv";
   
   // 1-Wire Devices
 
- 
   private static String TEMP1_ID; // DS18B20 
   private static String TEMP2_ID; // DS18B20 
   private static String TEMP3_ID; // DS18B20 
@@ -54,6 +53,7 @@ public class SimpleWeather
   public static String StationID = "main";
   public static String TEMP_LOW;
   public static String TEMP_HIGH;
+  public static String WIND_RADIUS;
   
   // class constants
 
@@ -82,6 +82,7 @@ public class SimpleWeather
   public int switch_on_cnt = 0;
   public float temp_low;
   public float temp_high;
+  public float wind_radius;
   public int humidityErrorCnt = 0;
   public int pressureErrorCnt = 0;
   public int solarErrorCnt = 0;
@@ -165,6 +166,7 @@ public class SimpleWeather
     
     temp_low = Float.valueOf(TEMP_LOW);
     temp_high = Float.valueOf(TEMP_HIGH);
+    wind_radius = Float.valueOf(WIND_RADIUS);
     rain_offset = Float.valueOf(RAIN_OFFSET);
 
     measurement = 0;
@@ -529,6 +531,7 @@ public class SimpleWeather
     StationID = ps.getProperty("StationID");
     TEMP_LOW = ps.getProperty("TEMP_LOW");
     TEMP_HIGH = ps.getProperty("TEMP_HIGH");
+    WIND_RADIUS = ps.getProperty("WIND_RADIUS");
     
     System.out.println("Starting " + VERSION);
     
