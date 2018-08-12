@@ -44,7 +44,7 @@ public class RainSensor
   
   public float getRainCount()
   {
-    float rain;
+    long rain;
     
     try
     {
@@ -56,7 +56,7 @@ public class RainSensor
       
       
       // read rain count from counter 15 and subtract offset
-      rain = rainDevice.readCounter(15) - RAIN_OFFSET;
+      rain = rainDevice.readCounter(15) - (long)RAIN_OFFSET;
       
       // convert to inches
       
@@ -65,14 +65,14 @@ public class RainSensor
       //rain *= 2.54f;
       
       //if (debugFlag)
-        System.out.println("Rain Count: " + rain + "\n");
+        System.out.println("Rain Count: " + rain);
     }
     catch (OneWireException e)
     {
       System.out.println("Error Reading Rain Counter: " + e);
-      rain = -9999f;
+      rain = -9999;
     }
-    return rain/100f;
+    return (float)rain/100f;
   }
 
   public long getPulseCount()

@@ -77,7 +77,7 @@ public class WindSensor
         // read wind counter & system time
         long currentCount = windSpdDevice.readCounter(15);
         long currentTicks = System.currentTimeMillis();
-        System.out.println("Wind Count: " + currentCount + "\n");
+        System.out.println("Wind Count: " + currentCount);
         
         if (lastTicks != 0)
         {
