@@ -235,45 +235,39 @@ public class SimpleWeather
         
         // get the weather
         if (ts1ex) {
+            try {
 		temp1 = ts1.getTemperature();
         	System.out.println("Temperature1 = " + temp1 + " degs C");
+            } catch (SimpleWeatherException e) {
+                System.out.println("Error Reading Temperature1: " + e);
+            }
 	}
         if (ts2ex) {
+            try {
 		temp2 = ts2.getTemperature();
         	System.out.println("Temperature2 = " + temp2 + " degs C");
+            } catch (SimpleWeatherException e) {
+                System.out.println("Error Reading Temperature2: " + e);
+            }
 	}
-        if (ts3ex) {
-		temp3 = ts3.getTemperature();
-        	System.out.println("Temperature3 = " + temp3 + " degs C");
-	}
-        if (ts4ex) {
-		temp4 = ts4.getTemperature();
-        	System.out.println("Temperature4 = " + temp4 + " degs C");
-	}
-        if (ts5ex) {
-		temp5 = ts5.getTemperature();
-        	System.out.println("Temperature5 = " + temp5 + " degs C");
-	}
+        
         if (ts21ex) {
+            try {
 		temp21 = ts21.getTemperature();
         	System.out.println("Temperature21 = " + temp21 + " degs C");
+            } catch (SimpleWeatherException e) {
+                System.out.println("Error Reading Temperature21: " + e);
+            }
 	}
         if (ts22ex) {
+            try {
 		temp22 = ts22.getTemperature();
         	System.out.println("Temperature22 = " + temp22 + " degs C");
+            } catch (SimpleWeatherException e) {
+                System.out.println("Error Reading Temperature22: " + e);
+            }
 	}
-        if (ts23ex) {
-		temp23 = ts23.getTemperature();
-        	System.out.println("Temperature23 = " + temp23 + " degs C");
-	}
-        if (ts24ex) {
-		temp24 = ts24.getTemperature();
-        	System.out.println("Temperature24 = " + temp24 + " degs C");
-	}
-        if (ts25ex) {
-		temp25 = ts25.getTemperature();
-        	System.out.println("Temperature25 = " + temp25 + " degs C");
-	}
+        
 	if (ws1ex) {
         	windSpeed = ws1.getWindSpeed();
         	windDir = ws1.getWindDirection();
@@ -360,20 +354,6 @@ public class SimpleWeather
 	    }
     	}
 
-        if (hour ==0 && minute == 0) {
-            wc.resetHighsAndLows();
-            if (ts1ex) {ts1.resetHighsAndLows();}
-            if (ts2ex) {ts2.resetHighsAndLows();}
-            if (ts3ex) {ts3.resetHighsAndLows();}
-            if (ts4ex) {ts4.resetHighsAndLows();}
-            if (ts5ex) {ts5.resetHighsAndLows();}
-            if (ts21ex) {ts21.resetHighsAndLows();}
-            if (ts22ex) {ts22.resetHighsAndLows();}
-            if (ts23ex) {ts23.resetHighsAndLows();}
-            if (ts24ex) {ts24.resetHighsAndLows();}
-            if (ts25ex) {ts25.resetHighsAndLows();}
-            if (ws1ex) {ws1.resetHighsAndLows();}
-        }
         wc.update();
         if (ws1ex) {ws1.update();}
         logger.logData(date, this);
@@ -394,18 +374,6 @@ public class SimpleWeather
             if (ts23ex) {ts23.resetAverages();}
             if (ts24ex) {ts24.resetAverages();}
             if (ts25ex) {ts25.resetAverages();}
-            if (ws1ex) {ws1.resetAverages();}
-	    secs = 0;
-	    switch_on_cnt = 0;
-            if (ws1ex) {ws1.resetAverages();}
-	    secs = 0;
-	    switch_on_cnt = 0;
-            if (ws1ex) {ws1.resetAverages();}
-	    secs = 0;
-	    switch_on_cnt = 0;
-            if (ws1ex) {ws1.resetAverages();}
-	    secs = 0;
-	    switch_on_cnt = 0;
             if (ws1ex) {ws1.resetAverages();}
 	    secs = 0;
 	    switch_on_cnt = 0;
