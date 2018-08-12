@@ -17,14 +17,14 @@ import java.io.*;
 
 import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
-import com.dalsemi.onewire.container.*;
+//import com.dalsemi.onewire.container.*;
 
 
 
 public class SimpleWeather
 {
   // user constants
-  public static final String VERSION = "SimpleWeather 2.0.4 21.07.2016";
+  public static final String VERSION = "SimpleWeather 2.0.5 12.08.2018";
   public static String ONE_WIRE_SERIAL_PORT; 
   public static final String LOG_PATHNAME = "WeatherLog.csv";
   

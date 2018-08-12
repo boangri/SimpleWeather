@@ -59,20 +59,20 @@ public class RainSensor
       rain = rainDevice.readCounter(15) - RAIN_OFFSET;
       
       // convert to inches
-      rain /= 100F;
+      
       
       // convert to centimeters if required
       //rain *= 2.54f;
       
-      if (debugFlag)
-        System.out.println("Rain Count: " + rain + " inches\n");
+      //if (debugFlag)
+        System.out.println("Rain Count: " + rain + "\n");
     }
     catch (OneWireException e)
     {
       System.out.println("Error Reading Rain Counter: " + e);
-      rain = -99.99f;
+      rain = -9999f;
     }
-    return rain;
+    return rain/100f;
   }
 
   public long getPulseCount()
