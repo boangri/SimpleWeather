@@ -16,14 +16,14 @@ import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
 import com.dalsemi.onewire.container.*;
 
-public class TempSensor
+public class TempSensor extends AbstractSensor
 {
   // class variables
-  private DSPortAdapter adapter;
+  //private DSPortAdapter adapter;
   private OneWireContainer10 tempDevice = null;
-  private static boolean debugFlag = SimpleWeather.debugFlag;
-  private float sumTemp;
-  private int samples;
+//  private static boolean debugFlag = SimpleWeather.debugFlag;
+//  private float sumTemp;
+//  private int samples;
   
   public TempSensor(DSPortAdapter adapter, String deviceID, int num)
   {
@@ -37,7 +37,7 @@ public class TempSensor
       {
         // set resolution to max
         byte[] state = tempDevice.readDevice();
-        tempDevice.setTemperatureResolution(tempDevice.RESOLUTION_MAXIMUM, state);
+        tempDevice.setTemperatureResolution(OneWireContainer10.RESOLUTION_MAXIMUM, state);
         tempDevice.writeDevice(state);
         
         if (debugFlag)
@@ -73,8 +73,7 @@ public class TempSensor
       state = tempDevice.readDevice();
       temperature = (float)tempDevice.getTemperature(state);
 
-      samples++;
-      sumTemp += temperature;
+      update(temperature);
     }
     catch (OneWireException e)
     {
@@ -84,21 +83,8 @@ public class TempSensor
     return temperature;
   }
   
-  public void resetAverages()
-  {
-    samples = 0;
-    sumTemp = 0;
-    
-    if (debugFlag)
-      System.out.println("Temperature Averages Reset");
-  }
-  
   public String getTemp()
-  {
-    if (samples == 0) return "U";
-    
-    float avgTemp = sumTemp/samples;
-    
-    return WeatherCruncher.formatValue(avgTemp, 1);
+  { 
+    return getAverage();
   }
 }

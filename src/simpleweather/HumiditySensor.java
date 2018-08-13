@@ -21,7 +21,7 @@ import com.dalsemi.onewire.container.*;
 
 
 
-public class HumiditySensor
+public class HumiditySensor extends AbstractSensor
 {
   // calibration constants
   private final float HUMIDITY_OFFSET = 0.0f;
@@ -31,17 +31,14 @@ public class HumiditySensor
   private final float SOLAR_GAIN   = 0.967f;
   
   // class variables
-  private DSPortAdapter adapter;
+  //private DSPortAdapter adapter;
   private OneWireContainer26 humidityDevice = null;
-  private OneWireContainer26 solarDevice = null;
-  private static boolean debugFlag = SimpleWeather.debugFlag;
+  //private OneWireContainer26 solarDevice = null;
+  //private static boolean debugFlag = SimpleWeather.debugFlag;
 
   // class constants
   private final int VDD_SENSE_AD = 0;
   private final int CURRENT_SENSE_AD = 2;
-  
-  private float sum;
-  private int samples;
 
   public HumiditySensor(DSPortAdapter adapter, String deviceID)
   {
@@ -103,6 +100,7 @@ public class HumiditySensor
 //        System.out.println("Error Reading Humidity: " + e);
 //      }
     }
+    update(humidity);
     return humidity;
   }
   
@@ -184,14 +182,9 @@ public class HumiditySensor
     public String getHum()
     {
     
-        float avgHum;
-        if (samples > 0) {
-            avgHum = sum/samples;
-        } else {
-            return "U";
-        }
+        return getAverage();
 
-        return WeatherCruncher.formatValue(avgHum, 1);
+        //return WeatherCruncher.formatValue(avgHum, 1);
     }
 
 }
