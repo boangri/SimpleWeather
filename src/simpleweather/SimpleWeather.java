@@ -96,7 +96,8 @@ public class SimpleWeather
   // sensors
   public TempSensor ts1,ts2,ts3,ts4,ts5;
   public TempSensor2 ts21,ts22,ts23,ts24,ts25;
-  public WindSensor ws1;
+  public WindSpeedSensor wss1;
+  public WindDirSensor wds1;
   public HumiditySensor hs1;
   public BaroSensor bs1;
   public RainSensor rs1;
@@ -175,36 +176,26 @@ public class SimpleWeather
     
     if (ts1ex) {ts1 = new TempSensor(adapter, TEMP_SENSOR1_ID, 1);}
     if (ts2ex) {ts2 = new TempSensor(adapter, TEMP_SENSOR2_ID, 2);}
-    if (ts3ex) {ts3 = new TempSensor(adapter, TEMP_SENSOR3_ID, 3);}
-    if (ts4ex) {ts4 = new TempSensor(adapter, TEMP_SENSOR4_ID, 4);}    
-    if (ts5ex) {ts5 = new TempSensor(adapter, TEMP_SENSOR5_ID, 5);}    
+   
     if (ts21ex) {ts21 = new TempSensor2(adapter, TEMP1_ID, 1);}
     if (ts22ex) {ts22 = new TempSensor2(adapter, TEMP2_ID, 2);}
-    if (ts23ex) {ts23 = new TempSensor2(adapter, TEMP3_ID, 3);}
-    if (ts24ex) {ts24 = new TempSensor2(adapter, TEMP4_ID, 4);}    
-    if (ts25ex) {ts25 = new TempSensor2(adapter, TEMP5_ID, 5);}    
-    if (ws1ex) {ws1 = new WindSensor(adapter, WIND_SPD_ID, WIND_DIR_ID);}
+    
+    if (ws1ex) {wss1 = new WindSpeedSensor(adapter, WIND_SPD_ID);}
+    if (ws1ex) {wds1 = new WindDirSensor(adapter, WIND_DIR_ID);}
     if (hs1ex) {hs1 = new HumiditySensor(adapter, HUMIDITY_SENSOR_ID);}
     if (bs1ex) {bs1 = new BaroSensor(adapter, BARO_SENSOR_ID);}
     if (rs1ex) {rs1 = new RainSensor(adapter, RAIN_COUNTER_ID, rain_offset);}
-    if (relayex) {
-	relay = new OWSwitch(adapter);
-	relay.setSwitchState(RELAY1_ID, relayOn);
-    }
     
     wc.resetHighsAndLows();
     wc.resetAverages();
     if (ts1ex) {ts1.resetAverages();}
     if (ts2ex) {ts2.resetAverages();}
-    if (ts3ex) {ts3.resetAverages();}
-    if (ts4ex) {ts4.resetAverages();}   
-    if (ts5ex) {ts5.resetAverages();}   
     if (ts21ex) {ts21.resetAverages();}
     if (ts22ex) {ts22.resetAverages();}
-    if (ts23ex) {ts23.resetAverages();}
-    if (ts24ex) {ts24.resetAverages();}   
-    if (ts25ex) {ts25.resetAverages();}   
-    if (ws1ex) {ws1.resetAverages();}
+    if (ws1ex) {
+        wss1.resetAverages();
+        wds1.resetAverages();
+    }
     
     // main program loop
     while(!quit)
@@ -269,10 +260,14 @@ public class SimpleWeather
 	}
         
 	if (ws1ex) {
-        	windSpeed = ws1.getWindSpeed();
-        	windDir = ws1.getWindDirection();
-        	System.out.println("Wind Speed = " + windSpeed + " M/sec " +
-                "from the " + ws1.getWindDirStr(windDir));
+            try {
+        	windSpeed = wss1.getWindSpeed();
+            } catch (SimpleWeatherException e) {
+                System.out.println("Error Reading Wind Speed: " + e);
+            }    
+            windDir = wds1.getWindDirection();
+            System.out.println("Wind Speed = " + windSpeed + " M/sec " +
+            "from the " + wds1.getWindDirStr(windDir));
 	}
         // get humidity
 	if (hs1ex) {
@@ -355,7 +350,10 @@ public class SimpleWeather
     	}
 
         wc.update();
-        if (ws1ex) {ws1.update();}
+        if (ws1ex) {
+            wss1.update();
+            wds1.update();
+        }
         logger.logData(date, this);
         
         // update the time
@@ -374,7 +372,10 @@ public class SimpleWeather
             if (ts23ex) {ts23.resetAverages();}
             if (ts24ex) {ts24.resetAverages();}
             if (ts25ex) {ts25.resetAverages();}
-            if (ws1ex) {ws1.resetAverages();}
+            if (ws1ex) {
+                wss1.resetAverages();
+                wds1.resetAverages();
+            }
 	    secs = 0;
 	    switch_on_cnt = 0;
         }

@@ -3,7 +3,6 @@
  Project Name: SimpleWeather
  File name:    WindSensor.java
  Version:      1.0.3 02/05/06
- $Id: WindSensor.java,v 1.1.1.1 2010/02/19 15:34:24 boris Exp $
  Copyright (C) 2006 by T. Bitson - All rights reserved.
  
  This class provides the interface to the 1-wire temperature sensor
@@ -20,17 +19,15 @@ import com.dalsemi.onewire.container.*;
 
 
 
-public class WindSensor
+public class WindDirSensor
 {
   // calibration constants
-  private static final float radius = Float.parseFloat(SimpleWeather.WIND_RADIUS); // effective radius of the wheel
   private static final int NORTH_OFFSET = Integer.parseInt(SimpleWeather.NORTH_OFFSET);
   
   // class variables
   private DSPortAdapter adapter;
   private long lastCount = 0;
   private long lastTicks = 0;
-  private OneWireContainer1D   windSpdDevice = null;
   private OneWireContainer20   windDirDevice = null;
   public float windSpeed = 0f;
   public int windDir = 16;
@@ -39,76 +36,18 @@ public class WindSensor
   private double sumSin, sumCos;
   private static final boolean debugFlag = SimpleWeather.debugFlag;
  
-  public WindSensor(DSPortAdapter adapter, String windSpdDeviceID, String windDirDeviceID)
+  public WindDirSensor(DSPortAdapter adapter, String windDirDeviceID)
   {
     // get instances of the 1-wire devices
-    windSpdDevice   = new OneWireContainer1D(adapter, windSpdDeviceID);
     windDirDevice   = new OneWireContainer20(adapter, windDirDeviceID);
-    
-    if (windSpdDevice != null)
-    {
-      lastTicks = System.currentTimeMillis();
-      try
-      {
-        lastCount = windSpdDevice.readCounter(15);
-      } 
-      catch (OneWireException e)
-      {
-         System.out.print("Can't create Conatiner20\n");
-      }
-    }  
   }
  
- 
-  public float getWindSpeed()
-  {
-    //float windSpeed = 0f;
-    
-    if (windSpdDevice != null)
-    {
-      try
-      {
-        if (debugFlag)
-        {
-          System.out.print("Wind Speed: Device = " + windSpdDevice.getName());
-          System.out.print("  ID = " + windSpdDevice.getAddressAsString() + "\n");
-        }
-        
-        // read wind counter & system time
-        long currentCount = windSpdDevice.readCounter(15);
-        long currentTicks = System.currentTimeMillis();
-        System.out.println("Wind Count: " + currentCount);
-        
-        if (lastTicks != 0)
-        {
-          // calculate the wind speed based on the revolutions per second
-          //windSpeed = ((currentCount-lastCount)/((currentTicks-lastTicks)/1000f)) / 2.0f * 2.453f;   // MPH
-          //windSpeed = ((currentCount-lastCount)/((currentTicks-lastTicks)/1000f)) / 2.0f * 2.453f * 1609.0f / 3600.0f;   // Met/sec
-          windSpeed = (float)(currentCount-lastCount)/(float)(currentTicks-lastTicks)*1000f*6.28f*radius;
-        }
-        
-        if (debugFlag)
-          System.out.println("Count = " + (currentCount-lastCount) + " during " +
-                  (currentTicks-lastTicks) + "ms calcs to " + windSpeed + " radius="+radius);
-        
-        // remember count & time
-        lastCount = currentCount;
-        lastTicks = currentTicks;
-      }
-      catch (OneWireException e)
-      {
-        System.out.println("Error Reading Wind Speed: " + e);
-        windSpeed = -999.9f;
-      }
-    }
-    return windSpeed;
-  }
-  
-  
-  
+  /**
+   * 
+   * @return 
+   */
   public int getWindDirection()
   {
-    //int windDir;
     
     try
     {
@@ -171,8 +110,6 @@ public class WindSensor
     return windDir;
   }
   
-  
-  
   // convert wind direction A to D results to direction value
   private int lookupWindDir(float a, float b, float c, float d)
   {
@@ -214,10 +151,8 @@ public class WindSensor
     {4.5F, 4.5F, 2.5F, 2.5F}, // NNW 15
   };
   
-  
-  
 // convert direction value into compass direction string
-  public static String getWindDirStr(int input)
+  public String getWindDirStr(int input)
   {
     String[] direction = {" N ", "NNE", "NE ", "ENE",
                           " E ", "ESE", "SE ", "SSE",
@@ -239,25 +174,15 @@ public class WindSensor
     
     return direction[input];
   }
-  
-  
-    public void resetHighsAndLows()
-  {
-    // rest sumWind speed
-    windHi = 0;
-  }
-  
     
   public void resetAverages()
   {
     samples = 0;
     sumSin = 0;
     sumCos = 0;
-    sumWind = 0;
-    windPk = 0;
     
     if (debugFlag)
-      System.out.println("Wind Averages Reset");
+      System.out.println("Wind Direction Averages Reset");
   }
   
   public void update()
@@ -270,34 +195,20 @@ public class WindSensor
     if (debugFlag)
       System.out.println("Sample #" + samples);
     
-    
-    // update sumWind speed
-    sumWind += windSpeed;
-    
-    if (windSpeed > windPk)
-        windPk = windSpeed;
-    
-   //pdateTrendData(sw.windSpeed, windTrend);
-    
-    
-    // update sumWind direction
-    
     // convert sumWind direction to radians
     double angle =  Math.toRadians(windDir * 22.5);
     
-    sumSin += Math.sin(angle) * windSpeed;
-    sumCos += Math.cos(angle) * windSpeed;
+    sumSin += Math.sin(angle);
+    sumCos += Math.cos(angle);
   }
   
   public String getWindDirAvg()
   {
-    // divide by the number of samples to get average
-    double avgSpeed = Math.sqrt(sumSin * sumSin + sumCos * sumCos);  
-    if (avgSpeed == 0) return "U";
-    if ((avgSpeed / samples) < 0.5) return "U";
+    if (samples == 0) return "U";
     
-    double avgSin = sumSin/avgSpeed;
-    double avgCos = sumCos/avgSpeed;
+    double r = Math.sqrt(sumSin*sumSin + sumCos*sumCos);
+    double avgSin = sumSin/r;
+    double avgCos = sumCos/r;
     
     // convert average to degrees
     float angle = (float)Math.toDegrees(Math.asin(avgSin));
@@ -317,28 +228,4 @@ public class WindSensor
     
     return WeatherCruncher.formatValue(angle, 1);
   }
-  
-  public String getWind()
-  {
-    if (samples == 0) return ("U");
-    
-    float avgWind = sumWind/samples;
-    
-    if (avgWind > windHi)
-      windHi = avgWind;
-    
-    return WeatherCruncher.formatValue(avgWind, 1);
-  }
- 
-  public String getWindHi()
-  {
-    return WeatherCruncher.formatValue(windHi, 1);
-  }
-  
-  
-  public String getWindPk()
-  {
-    return WeatherCruncher.formatValue(windPk, 1);
-  }
-    
 }
