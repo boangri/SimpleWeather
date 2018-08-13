@@ -86,9 +86,7 @@ public class DataLogger
       file.write((dateStr + DELIM).getBytes());                         // time
       file.write((format(sw.temp1, 1) + DELIM).getBytes());             // temp1
       file.write((format(sw.temp2, 1) + DELIM).getBytes());             // temp2  
-      file.write((format(sw.temp3, 1) + DELIM).getBytes());
-      file.write((format(sw.temp4, 1) + DELIM).getBytes());
-      file.write((format(sw.temp5, 1) + DELIM).getBytes());
+      
       file.write((format(sw.temp21, 1) + DELIM).getBytes());
       file.write((format(sw.windSpeed, 1) + DELIM).getBytes());         // wind speed
       file.write((Integer.toString(sw.windDir) + DELIM).getBytes());   // wind direction

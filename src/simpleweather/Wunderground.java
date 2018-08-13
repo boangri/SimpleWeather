@@ -62,37 +62,12 @@ public class Wunderground implements Runnable {
         if (sw.ts2ex) {
             sendUrl.append("&temp2=" + sw.ts2.getTemp());
         }
-        if (sw.ts3ex) {
-            sendUrl.append("&temp3=" + sw.ts3.getTemp());
-        }
-        if (sw.ts4ex) {
-            sendUrl.append("&temp4=" + sw.ts4.getTemp());
-        }
-        if (sw.ts5ex) {
-            sendUrl.append("&temp5=" + sw.ts5.getTemp());
-        }
         // temp DS18B20
         if (sw.ts21ex) {
             sendUrl.append("&temp21=" + sw.ts21.getTemp());
         }
         if (sw.ts22ex) {
             sendUrl.append("&temp22=" + sw.ts22.getTemp());
-        }
-        if (sw.ts23ex) {
-            sendUrl.append("&temp23=" + sw.ts23.getTemp());
-        }
-        if (sw.ts24ex) {
-            sendUrl.append("&temp24=" + sw.ts24.getTemp());
-        }
-        if (sw.ts25ex) {
-            sendUrl.append("&temp25=" + sw.ts25.getTemp());
-        }
-        // Heater statistics
-        if (sw.relayex) {
-            sendUrl.append("&secs=" + sw.secs);
-            sendUrl.append("&cnt=" + sw.switch_on_cnt);
-            sendUrl.append("&low=" + sw.temp_low);
-            sendUrl.append("&high=" + sw.temp_high);
         }
         // Humidity
         if (sw.hs1ex) {
@@ -105,9 +80,9 @@ public class Wunderground implements Runnable {
 
         // Wind Speed and Direction
         if (sw.ws1ex) {
-            sendUrl.append("&wspd=" + wc.getWind());
-            sendUrl.append("&wspdpk=" + wc.getWindPk());
-            sendUrl.append("&wdir=" + wc.getWindDirAvg());
+            sendUrl.append("&wspd=" + sw.wss1.getWind());
+            sendUrl.append("&wspdpk=" + sw.wss1.getWindSigma());
+            sendUrl.append("&wdir=" + sw.wds1.getWindDirAvg());
         }
 
         // Baro Pressure
@@ -120,7 +95,7 @@ public class Wunderground implements Runnable {
             sendUrl.append("&rainin=" + wc.getRainRate());
             //sendUrl.append("&dailyrainin=" + wc.getRain24());
             sendUrl.append("&raincnt=" + wc.getRain());
-            sendUrl.append("&pulse=" + sw.pulse);
+            //sendUrl.append("&pulse=" + sw.pulse);
         }
 
         // Software Type & action

@@ -32,27 +32,18 @@ public class SimpleWeather
 
   private static String TEMP1_ID; // DS18B20 
   private static String TEMP2_ID; // DS18B20 
-  private static String TEMP3_ID; // DS18B20 
-  private static String TEMP4_ID; // DS18B20 
-  private static String TEMP5_ID; // DS18B20 
   private static String TEMP_SENSOR1_ID; // WS-1 temp. sensor 
   private static String TEMP_SENSOR2_ID; // outdoor temp. (pagoda)
-  private static String TEMP_SENSOR3_ID; // indoor temp.
-  private static String TEMP_SENSOR4_ID; // humidity temp. 
-  private static String TEMP_SENSOR5_ID; // rain gauge. 
   private static String HUMIDITY_SENSOR_ID;    
   private static String WIND_SPD_ID;  
   private static String WIND_DIR_ID; 
   private static String BARO_SENSOR_ID;
   private static String RAIN_COUNTER_ID;
   private static String RAIN_OFFSET;
-  private static String RELAY1_ID;
   private static String MEASUREMENT_INTERVAL; //  Interval between measurements in seconds. Must divide 60.
   public static String WWW = "www.xland.ru";
   public static String URL = "/cgi-bin/meteo_upd";
   public static String StationID = "main";
-  public static String TEMP_LOW;
-  public static String TEMP_HIGH;
   public static String WIND_RADIUS;
   
   // class constants
@@ -62,8 +53,8 @@ public class SimpleWeather
   
   // class variables
   public static boolean debugFlag = false;
-  public float temp1, temp2, temp3, temp4, temp5;
-  public float temp21, temp22, temp23, temp24, temp25;
+  public float temp1, temp2;
+  public float temp21, temp22;
   public float humidity;
   public float solarLevel;
   public float dewpoint;
@@ -79,9 +70,6 @@ public class SimpleWeather
   public static int lines;
   public static Properties ps = new Properties();
   public int secs = 0;
-  public int switch_on_cnt = 0;
-  public float temp_low;
-  public float temp_high;
   public float wind_radius;
   public int humidityErrorCnt = 0;
   public int pressureErrorCnt = 0;
@@ -94,14 +82,14 @@ public class SimpleWeather
   
   
   // sensors
-  public TempSensor ts1,ts2,ts3,ts4,ts5;
-  public TempSensor2 ts21,ts22,ts23,ts24,ts25;
+  public TempSensor ts1,ts2;
+  public TempSensor2 ts21,ts22;
   public WindSpeedSensor wss1;
   public WindDirSensor wds1;
   public HumiditySensor hs1;
   public BaroSensor bs1;
   public RainSensor rs1;
-  public OWSwitch relay;
+  
   
   // Flags - existance of the sensors
   public static Boolean ts1ex = false;  
@@ -165,8 +153,6 @@ public class SimpleWeather
     InputStreamReader in = new InputStreamReader(System.in);
     boolean relayOn = false;
     
-    temp_low = Float.valueOf(TEMP_LOW);
-    temp_high = Float.valueOf(TEMP_HIGH);
     wind_radius = Float.valueOf(WIND_RADIUS);
     rain_offset = Float.valueOf(RAIN_OFFSET);
 
@@ -317,44 +303,13 @@ public class SimpleWeather
 //        	pulse = rs1.getPulseCount();
 //        	System.out.println("Pulse = " + pulse + " ");
 	}  
-        
-	// temperature control 
-	// keeping temp22 between TEMP_LOW and TEMP_HIGH
-    	if ((relayex) && (ts22ex)) {
-	    if (!relay.stateKnown) {
-		relayOn = relay.getSwitchState(RELAY1_ID);	
-	    }		
-	    //if (relayOn && (temp22 > temp_high)) {
-	    //if (temp22 > temp_high) {
-	    if (((relay.stateKnown && relayOn)||!relay.stateKnown )&& (temp22 > temp_high)) {
-        	System.out.println("Rain counter temp = " + temp22 + " degs C");
-        	System.out.println("Trying to switch OFF");
-	    	relay.setSwitchState(RELAY1_ID, false);
-		relayOn = relay.getSwitchState(RELAY1_ID);	
-		switch_on_cnt = switch_on_cnt + 1;
-	    }
-	    //if (!relayOn && (temp22 < temp_low)) {
-	    //if (temp22 < temp_low) {
-	    if (((relay.stateKnown && !relayOn)||!relay.stateKnown )&& (temp22 < temp_low)) {
-        	System.out.println("Rain counter temp = " + temp22 + " degs C");
-        	System.out.println("Trying to switch ON");
-	    	relay.setSwitchState(RELAY1_ID, true);
-	    	relayOn = relay.getSwitchState(RELAY1_ID);
-	    }
-	    if (!relay.stateKnown) {
-		relayOn = relay.getSwitchState(RELAY1_ID);	
-	    }		
-	    if (relayOn && relay.stateKnown) {
-	        secs = secs + interval;
-	    }
-    	}
 
         wc.update();
         if (ws1ex) {
             wss1.update();
             wds1.update();
         }
-        logger.logData(date, this);
+        //logger.logData(date, this);
         
         // update the time
         lastMinute = minute;
@@ -364,20 +319,15 @@ public class SimpleWeather
             wc.resetAverages();
             if (ts1ex) {ts1.resetAverages();}
             if (ts2ex) {ts2.resetAverages();}
-            if (ts3ex) {ts3.resetAverages();}
-            if (ts4ex) {ts4.resetAverages();}
-            if (ts5ex) {ts5.resetAverages();}
+           
             if (ts21ex) {ts21.resetAverages();}
             if (ts22ex) {ts22.resetAverages();}
-            if (ts23ex) {ts23.resetAverages();}
-            if (ts24ex) {ts24.resetAverages();}
-            if (ts25ex) {ts25.resetAverages();}
+            
             if (ws1ex) {
                 wss1.resetAverages();
                 wds1.resetAverages();
             }
 	    secs = 0;
-	    switch_on_cnt = 0;
         }
       }
       
@@ -435,18 +385,6 @@ public class SimpleWeather
     if (TEMP_SENSOR2_ID != null) {
 	ts2ex = true;
     }
-    TEMP_SENSOR3_ID = ps.getProperty("TEMP_SENSOR3_ID");
-    if (TEMP_SENSOR3_ID != null) {
-	ts3ex = true;
-    }
-    TEMP_SENSOR4_ID = ps.getProperty("TEMP_SENSOR4_ID");
-    if (TEMP_SENSOR4_ID != null) {
-	ts4ex = true;
-    }
-    TEMP_SENSOR5_ID = ps.getProperty("TEMP_SENSOR5_ID");
-    if (TEMP_SENSOR5_ID != null) {
-	ts5ex = true;
-    }
     TEMP1_ID = ps.getProperty("TEMP1_ID");
     if (TEMP1_ID != null) {
 	ts21ex = true;
@@ -454,18 +392,6 @@ public class SimpleWeather
     TEMP2_ID = ps.getProperty("TEMP2_ID");
     if (TEMP2_ID != null) {
 	ts22ex = true;
-    }
-    TEMP3_ID = ps.getProperty("TEMP3_ID");
-    if (TEMP3_ID != null) {
-	ts23ex = true;
-    }
-    TEMP4_ID = ps.getProperty("TEMP4_ID");
-    if (TEMP4_ID != null) {
-	ts24ex = true;
-    }
-    TEMP5_ID = ps.getProperty("TEMP5_ID");
-    if (TEMP5_ID != null) {
-	ts25ex = true;
     }
     HUMIDITY_SENSOR_ID = ps.getProperty("HUMIDITY_SENSOR_ID");
     if (HUMIDITY_SENSOR_ID != null) {
@@ -489,18 +415,13 @@ public class SimpleWeather
     ONE_WIRE_SERIAL_PORT = ps.getProperty("ONE_WIRE_SERIAL_PORT");
     NORTH_OFFSET = ps.getProperty("NORTH_OFFSET");
     MEASUREMENT_INTERVAL = ps.getProperty("MEASUREMENT_INTERVAL");
-    RELAY1_ID = ps.getProperty("RELAY1_ID");
-    if (RELAY1_ID != null) {
-	relayex = true;
-    }
+    
     WWW = ps.getProperty("WWW");
     URL = ps.getProperty("URL");
     if (URL != null) {
 	urlex = true;
     }
     StationID = ps.getProperty("StationID");
-    TEMP_LOW = ps.getProperty("TEMP_LOW");
-    TEMP_HIGH = ps.getProperty("TEMP_HIGH");
     WIND_RADIUS = ps.getProperty("WIND_RADIUS");
     
     System.out.println("Starting " + VERSION);

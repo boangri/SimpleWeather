@@ -40,6 +40,8 @@ public class HumiditySensor
   private final int VDD_SENSE_AD = 0;
   private final int CURRENT_SENSE_AD = 2;
   
+  private float sum;
+  private int samples;
 
   public HumiditySensor(DSPortAdapter adapter, String deviceID)
   {
@@ -178,5 +180,18 @@ public class HumiditySensor
     // return a float
     return (float)level;
   }
+  
+    public String getHum()
+    {
+    
+        float avgHum;
+        if (samples > 0) {
+            avgHum = sum/samples;
+        } else {
+            return "U";
+        }
+
+        return WeatherCruncher.formatValue(avgHum, 1);
+    }
 
 }

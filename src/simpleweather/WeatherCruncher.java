@@ -283,30 +283,30 @@ public class WeatherCruncher
   
   
   
-  public String getWindDirAvg()
-  {
-    // divide by the number of samples to get average
-    double avgSin = sumSin/samplesWindDir;
-    double avgCos = sumCos/samplesWindDir;
-    
-    // convert average to degrees
-    float angle = (float)Math.toDegrees(Math.asin(avgSin));
-    
-    // correct for the quadrant
-    if (avgCos < 0)
-      angle = 180 - angle;
-    
-    else if (avgSin < 0)
-      angle = 360 + angle;
-    
-    // convert back to 0 to 15 value
-    //int dir = (int)((angle + 0.5)/22.5);
-    
-    if (debugFlag)
-      System.out.println("Avg Wind Angle = " + angle);
-    
-    return formatValue(angle, 0);
-  }
+//  public String getWindDirAvg()
+//  {
+//    // divide by the number of samples to get average
+//    double avgSin = sumSin/samplesWindDir;
+//    double avgCos = sumCos/samplesWindDir;
+//    
+//    // convert average to degrees
+//    float angle = (float)Math.toDegrees(Math.asin(avgSin));
+//    
+//    // correct for the quadrant
+//    if (avgCos < 0)
+//      angle = 180 - angle;
+//    
+//    else if (avgSin < 0)
+//      angle = 360 + angle;
+//    
+//    // convert back to 0 to 15 value
+//    //int dir = (int)((angle + 0.5)/22.5);
+//    
+//    if (debugFlag)
+//      System.out.println("Avg Wind Angle = " + angle);
+//    
+//    return formatValue(angle, 0);
+//  }
   
   
   
@@ -355,58 +355,58 @@ public class WeatherCruncher
   }
   
     
-  // temperature --------------------------------
-  public String getTemp()
-  {
-    float avgTemp = sumTemp/samplesTemp;
-    
-    if (avgTemp > tempHi)
-      tempHi = avgTemp;
-    
-    if (avgTemp < tempLo)
-      tempLo = avgTemp;
-    
-    return formatValue(avgTemp, 1);
-  }
-  
-  // temperature -------------------------------
-  
-  public String getTempHi()
-  {
-    return formatValue(tempHi, 1);
-  }
-  
-  
-    
-  public String getTempLo()
-  {
-    return formatValue(tempLo, 1);
-  }  
-  
-  public String getTempTrend()
-  {
-    return leastSquaresSlope(TREND_SIZE, x, tempTrend);
-  }
-
-  // Wind Speed ---------------------------------
-  public String getWind()
-  {
-    if (samplesWindSpd == 0) return ("error");
-
-    float avgWind = (float)Math.sqrt(sumWind/samplesWindSpd);
-
-    if (avgWind > windHi)
-      windHi = avgWind;
-
-    return WeatherCruncher.formatValue(avgWind, 1);
-  }
-  
-  public String getWindPk()
-  {
-    return WeatherCruncher.formatValue(windPk, 1);
-  }
-
-  // Wind Direction -----------------------------
+//  // temperature --------------------------------
+//  public String getTemp()
+//  {
+//    float avgTemp = sumTemp/samplesTemp;
+//    
+//    if (avgTemp > tempHi)
+//      tempHi = avgTemp;
+//    
+//    if (avgTemp < tempLo)
+//      tempLo = avgTemp;
+//    
+//    return formatValue(avgTemp, 1);
+//  }
+//  
+//  // temperature -------------------------------
+//  
+//  public String getTempHi()
+//  {
+//    return formatValue(tempHi, 1);
+//  }
+//  
+//  
+//    
+//  public String getTempLo()
+//  {
+//    return formatValue(tempLo, 1);
+//  }  
+//  
+//  public String getTempTrend()
+//  {
+//    return leastSquaresSlope(TREND_SIZE, x, tempTrend);
+//  }
+//
+//  // Wind Speed ---------------------------------
+//  public String getWind()
+//  {
+//    if (samplesWindSpd == 0) return ("error");
+//
+//    float avgWind = (float)Math.sqrt(sumWind/samplesWindSpd);
+//
+//    if (avgWind > windHi)
+//      windHi = avgWind;
+//
+//    return WeatherCruncher.formatValue(avgWind, 1);
+//  }
+//  
+//  public String getWindPk()
+//  {
+//    return WeatherCruncher.formatValue(windPk, 1);
+//  }
+//
+//  // Wind Direction -----------------------------
 
   
   // Humidity -----------------------------------
@@ -428,25 +428,25 @@ public class WeatherCruncher
   }
   
   
-  public String getHumHi()
-  {
-    return formatValue(humHi, 1);
-  }
-  
-  
-  public String getHumLo()
-  {
-    return formatValue(humLo, 1);
-  }
-  
-  
-  public String getHumTrend()
-  {
-    return leastSquaresSlope(TREND_SIZE, x, humTrend);
-  }
-  
-  
-  
+//  public String getHumHi()
+//  {
+//    return formatValue(humHi, 1);
+//  }
+//  
+//  
+//  public String getHumLo()
+//  {
+//    return formatValue(humLo, 1);
+//  }
+//  
+//  
+//  public String getHumTrend()
+//  {
+//    return leastSquaresSlope(TREND_SIZE, x, humTrend);
+//  }
+//  
+//  
+//  
   // Dewpoint -----------------------------------
   public String getDP()
   {
@@ -467,23 +467,23 @@ public class WeatherCruncher
   }
   
   
-  public String getDPHi()
-  {
-    return formatValue(dpHi, 1);
-  }
-  
-  
-  public String getDPLo()
-  {
-    return formatValue(dpLo, 1);
-  }
-  
-  
-  public String getDPTrend()
-  {
-    return leastSquaresSlope(TREND_SIZE, x, dpTrend);
-  }
-  
+//  public String getDPHi()
+//  {
+//    return formatValue(dpHi, 1);
+//  }
+//  
+//  
+//  public String getDPLo()
+//  {
+//    return formatValue(dpLo, 1);
+//  }
+//  
+//  
+//  public String getDPTrend()
+//  {
+//    return leastSquaresSlope(TREND_SIZE, x, dpTrend);
+//  }
+//  
   // Solar level  -----------------------------------
   public String getSolar()
   {
@@ -502,13 +502,13 @@ public class WeatherCruncher
     return formatValue(avgSolar, 2);
   }
   
-  // Wind
-  public String getWindTrend()
-  {
-    return leastSquaresSlope(TREND_SIZE, x, windTrend);
-  }
-  
-  
+//  // Wind
+//  public String getWindTrend()
+//  {
+//    return leastSquaresSlope(TREND_SIZE, x, windTrend);
+//  }
+//  
+//  
   // Baro Pressure ------------------------------
   public String getBaro()
   {
@@ -529,22 +529,22 @@ public class WeatherCruncher
   }
   
   
-  public String getBaroHi()
-  {
-    return formatValue(baroHi, 2);
-  }
-  
-  
-  public String getBaroLo()
-  {
-    return formatValue(baroLo, 2);
-  }
-  
-  
-  public String getBaroTrend()
-  {
-    return leastSquaresSlope(TREND_SIZE, x, baroTrend);
-  }
+//  public String getBaroHi()
+//  {
+//    return formatValue(baroHi, 2);
+//  }
+//  
+//  
+//  public String getBaroLo()
+//  {
+//    return formatValue(baroLo, 2);
+//  }
+//  
+//  
+//  public String getBaroTrend()
+//  {
+//    return leastSquaresSlope(TREND_SIZE, x, baroTrend);
+//  }
   
   
   
