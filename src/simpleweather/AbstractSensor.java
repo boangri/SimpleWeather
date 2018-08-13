@@ -4,6 +4,7 @@ package simpleweather;
 import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
 import com.dalsemi.onewire.container.*;
+import java.util.StringTokenizer;
 
 /**
  *
@@ -39,7 +40,7 @@ public abstract class AbstractSensor {
     
     float avg = sumValues/samples;
     
-    return WeatherCruncher.formatValue(avg, 1);
+    return this.formatValue(avg, 1);
   }
   
   public String getSigma()
@@ -50,7 +51,50 @@ public abstract class AbstractSensor {
     float disp = sumSquares/samples;
     float sigma = (float)Math.sqrt(disp - avg*avg);
     
-    return WeatherCruncher.formatValue(avg, 1);
+    return this.formatValue(avg, 1);
+  }
+  
+  // short routine format a float to 'digit' decimals and convert to string
+  public String formatValue(float input, int digits)
+  {
+    
+    try
+    {
+      
+      String arg1;
+      String arg2;
+      StringTokenizer t;
+      
+      if (digits < 1)
+        digits = 1;
+      
+      if (digits > 3)
+        digits = 3;
+      
+      
+      float roundVal;
+      
+      if (digits == 1)
+        roundVal = .05f;
+      else if (digits == 2)
+        roundVal = .005f;
+      else // digits = 3
+        roundVal = .0005f;
+      
+      t = new StringTokenizer(Double.toString(input + roundVal), ".");
+      
+      arg1 = t.nextToken();
+      arg2 = t.nextToken();
+      
+      if (Math.abs(input + roundVal) < .001 && digits == 3)
+        return ("0.000");
+      else
+        return arg1 + "." + arg2.substring(0, digits);
+    }
+    catch (Exception e)
+    {
+      return "error";
+    }
   }
   
 }

@@ -75,7 +75,7 @@ public class TempSensor2 extends AbstractSensor
       state = tempDevice.readDevice();
       temperature = (float)tempDevice.getTemperature(state);
 
-      update(temperature);
+      this.update(temperature);
     }
     catch (OneWireException e)
     {

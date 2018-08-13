@@ -100,7 +100,7 @@ public class HumiditySensor extends AbstractSensor
 //        System.out.println("Error Reading Humidity: " + e);
 //      }
     }
-    update(humidity);
+    this.update(humidity);
     return humidity;
   }
   
