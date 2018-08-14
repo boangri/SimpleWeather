@@ -10,12 +10,13 @@
  
  *****************************************************************************/
 
-package simpleweather;
+package simpleweather.sensor;
 
 
 import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
 import com.dalsemi.onewire.container.*;
+import simpleweather.SimpleWeather;
 
 
 

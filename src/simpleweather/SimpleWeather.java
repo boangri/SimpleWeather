@@ -12,6 +12,13 @@
 package simpleweather;
 
 
+import simpleweather.sensor.WindDirSensor;
+import simpleweather.sensor.RainSensor;
+import simpleweather.sensor.Temp2Sensor;
+import simpleweather.sensor.HumiditySensor;
+import simpleweather.sensor.TempSensor;
+import simpleweather.sensor.WindSpeedSensor;
+import simpleweather.sensor.BaroSensor;
 import java.util.*;
 import java.io.*;
 

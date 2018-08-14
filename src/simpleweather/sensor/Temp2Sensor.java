@@ -1,34 +1,37 @@
 /******************************************************************************
  
  Project Name: SimpleWeather
- File name:    TempSensor.java
+ File name:    TempSensor2.java
+ Version:      1.0.2 02/07/06
  
  Copyright (C) 2006 by T. Bitson - All rights reserved.
  
- This class provides the interface to the 1-wire temperature sensor
+ This class provides the interface to the 1-wire DS18B20 temperature sensor
  device.
  
  *****************************************************************************/
 
-package simpleweather;
+package simpleweather.sensor;
+
 
 import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
 import com.dalsemi.onewire.container.*;
+import simpleweather.SimpleWeatherException;
 
-public class TempSensor extends AbstractSensor
+public class Temp2Sensor extends AbstractSensor
 {
   // class variables
   //private DSPortAdapter adapter;
-  private OneWireContainer10 tempDevice = null;
-//  private static boolean debugFlag = SimpleWeather.debugFlag;
+  private OneWireContainer28 tempDevice = null;
+  //private static boolean debugFlag = SimpleWeather.debugFlag;
 //  private float sumTemp;
 //  private int samples;
   
-  public TempSensor(DSPortAdapter adapter, String deviceID, int num)
+  public Temp2Sensor(DSPortAdapter adapter, String deviceID, int num)
   {
     // get instances of the 1-wire devices
-    tempDevice = new OneWireContainer10(adapter, deviceID);
+    tempDevice = new OneWireContainer28(adapter, deviceID);
 	
     // does this temp sensor have greater than .5 deg resolution?
     try
@@ -37,7 +40,7 @@ public class TempSensor extends AbstractSensor
       {
         // set resolution to max
         byte[] state = tempDevice.readDevice();
-        tempDevice.setTemperatureResolution(OneWireContainer10.RESOLUTION_MAXIMUM, state);
+        tempDevice.setTemperatureResolution(OneWireContainer28.RESOLUTION_12_BIT, state);
         tempDevice.writeDevice(state);
         
         if (debugFlag)
@@ -58,7 +61,7 @@ public class TempSensor extends AbstractSensor
     if (tempDevice == null) {
         throw new SimpleWeatherException("temp device is null");
     }
-    
+      
     if (debugFlag)
     {
       System.out.print("Temperature: Device = " + tempDevice.getName());
@@ -77,14 +80,13 @@ public class TempSensor extends AbstractSensor
     }
     catch (OneWireException e)
     {
-      //System.out.println("Error Reading Temperature: " + e);
       throw new SimpleWeatherException("" + e);
     }
     return temperature;
   }
   
   public String getTemp()
-  { 
+  {
     return getAverage(1);
   }
 }
