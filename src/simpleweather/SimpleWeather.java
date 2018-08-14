@@ -151,7 +151,7 @@ public class SimpleWeather
     int interval = Integer.parseInt(MEASUREMENT_INTERVAL);
     boolean quit = false;
     InputStreamReader in = new InputStreamReader(System.in);
-    boolean relayOn = false;
+    //boolean relayOn = false;
     
     wind_radius = Float.valueOf(WIND_RADIUS);
     rain_offset = Float.valueOf(RAIN_OFFSET);
@@ -172,8 +172,6 @@ public class SimpleWeather
     if (bs1ex) {bs1 = new BaroSensor(adapter, BARO_SENSOR_ID);}
     if (rs1ex) {rs1 = new RainSensor(adapter, RAIN_COUNTER_ID, rain_offset);}
     
-    wc.resetHighsAndLows();
-    wc.resetAverages();
     if (ts1ex) {ts1.resetAverages();}
     if (ts2ex) {ts2.resetAverages();}
     if (ts21ex) {ts21.resetAverages();}
@@ -261,28 +259,28 @@ public class SimpleWeather
         	humidity = hs1.getHumidity();
         	System.out.println("Humidity = " + humidity + " %");
 	    }
-            catch (OneWireException e)
+            catch (SimpleWeatherException e)
  	    {
 		humidityErrorCnt += 1;
 		System.out.println("Error Reading Humidity: " + e + "Errors: " +humidityErrorCnt);
 	    }
-        // get solar level
-	    try {
-        	solarLevel = hs1.getSolarLevel();
-        	System.out.println("Solar Level = " + solarLevel + " %");
-            }
-	    catch (OneWireException e)
-	    {
-		solarErrorCnt += 1;
-		System.out.println("Error Reading Solar Sensor: " + e + "Errors: " + solarErrorCnt);
-	    }
+//        // get solar level
+//	    try {
+//        	solarLevel = hs1.getSolarLevel();
+//        	System.out.println("Solar Level = " + solarLevel + " %");
+//            }
+//	    catch (OneWireException e)
+//	    {
+//		solarErrorCnt += 1;
+//		System.out.println("Error Reading Solar Sensor: " + e + "Errors: " + solarErrorCnt);
+//	    }
 
 
-        // calculate dewpoint
-		if (ts2ex) {
-        		dewpoint = hs1.calcDewpoint(temp2, humidity);
-        		System.out.println("Dewpoint = " + dewpoint + " deg C");
-		}
+//        // calculate dewpoint
+//		if (ts2ex) {
+//        		dewpoint = hs1.calcDewpoint(temp2, humidity);
+//        		System.out.println("Dewpoint = " + dewpoint + " deg C");
+//		}
 	}
         // get barometric pressure
 	if (bs1ex) {
@@ -290,7 +288,7 @@ public class SimpleWeather
         	pressure = bs1.getPressure();
         	System.out.println("Pressure = " + pressure + " inHg");
 	    }
-            catch (OneWireException e)
+            catch (SimpleWeatherException e)
  	    {
 		pressureErrorCnt += 1;
 		System.out.println("Error Reading Pressure: " + e + "Errors: " +pressureErrorCnt);
@@ -298,13 +296,17 @@ public class SimpleWeather
 	}
         // get rain count
 	if (rs1ex) {
+            try {
         	rain = rs1.getRainCount();
         	System.out.println("Rain = " + rain + " in");
+            } catch (SimpleWeatherException e) {
+                System.out.println("Error Reading Rain Counter: " + e);
+            }
 //        	pulse = rs1.getPulseCount();
 //        	System.out.println("Pulse = " + pulse + " ");
 	}  
 
-        wc.update();
+        //wc.update();
         if (ws1ex) {
             wss1.update();
             wds1.update();
@@ -316,7 +318,7 @@ public class SimpleWeather
         
         if ((minute % 5 == 0) && (second == 0)) {
             wu.send(this, wc);
-            wc.resetAverages();
+          
             if (ts1ex) {ts1.resetAverages();}
             if (ts2ex) {ts2.resetAverages();}
            
@@ -327,6 +329,10 @@ public class SimpleWeather
                 wss1.resetAverages();
                 wds1.resetAverages();
             }
+            if (bs1ex) {bs1.resetAverages();}
+            if (hs1ex) {hs1.resetAverages();}
+            if (rs1ex) {rs1.resetAverages();}
+            
 	    secs = 0;
         }
       }

@@ -19,7 +19,7 @@ import com.dalsemi.onewire.container.*;
 
 
 
-public class WindSpeedSensor
+public class WindSpeedSensor extends AbstractSensor
 {
   // calibration constants
   private static final float radius = Float.parseFloat(SimpleWeather.WIND_RADIUS); // effective radius of the wheel
@@ -132,7 +132,7 @@ public class WindSpeedSensor
     
     double avgWind = Math.sqrt(sumSquares/samples);
     
-    return WeatherCruncher.formatValue((float)avgWind, 1);
+    return this.formatValue((float)avgWind, 1);
   } 
   
   public String getWindSigma()
@@ -143,6 +143,6 @@ public class WindSpeedSensor
     float disp = sumSquares/samples;
     double sigma = Math.sqrt(disp - avg*avg);
     
-    return WeatherCruncher.formatValue((float)sigma, 1);
+    return this.formatValue((float)sigma, 1);
   } 
 }

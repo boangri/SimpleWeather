@@ -71,11 +71,11 @@ public class Wunderground implements Runnable {
         }
         // Humidity
         if (sw.hs1ex) {
-            sendUrl.append("&humidity=" + wc.getHum());
+            sendUrl.append("&humidity=" + sw.hs1.getHum());
             // Dewpoint
-            sendUrl.append("&dewptf=" + wc.getDP());
+            //sendUrl.append("&dewptf=" + wc.getDP());
             // Solar radiation level, percent
-            sendUrl.append("&solar=" + wc.getSolar());
+            //sendUrl.append("&solar=" + wc.getSolar());
         }
 
         // Wind Speed and Direction
@@ -87,14 +87,14 @@ public class Wunderground implements Runnable {
 
         // Baro Pressure
         if (sw.bs1ex) {
-            sendUrl.append("&baromin=" + wc.getBaro());
+            sendUrl.append("&baromin=" + sw.bs1.getBaro());
         }
 
         // Rain
         if (sw.rs1ex) {
-            sendUrl.append("&rainin=" + wc.getRainRate());
+            sendUrl.append("&rainin=" + sw.rs1.getRainRate());
             //sendUrl.append("&dailyrainin=" + wc.getRain24());
-            sendUrl.append("&raincnt=" + wc.getRain());
+            sendUrl.append("&raincnt=" + sw.rs1.getRain());
             //sendUrl.append("&pulse=" + sw.pulse);
         }
 

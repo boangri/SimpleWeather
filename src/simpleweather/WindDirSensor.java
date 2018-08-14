@@ -19,22 +19,19 @@ import com.dalsemi.onewire.container.*;
 
 
 
-public class WindDirSensor
+public class WindDirSensor extends AbstractSensor
 {
   // calibration constants
   private static final int NORTH_OFFSET = Integer.parseInt(SimpleWeather.NORTH_OFFSET);
   
   // class variables
-  private DSPortAdapter adapter;
+  //private DSPortAdapter adapter;
   private long lastCount = 0;
   private long lastTicks = 0;
   private OneWireContainer20   windDirDevice = null;
   public float windSpeed = 0f;
   public int windDir = 16;
-  private float sumWind, windHi, windPk;
-  private int samples;
   private double sumSin, sumCos;
-  private static final boolean debugFlag = SimpleWeather.debugFlag;
  
   public WindDirSensor(DSPortAdapter adapter, String windDirDeviceID)
   {
@@ -46,7 +43,7 @@ public class WindDirSensor
    * 
    * @return 
    */
-  public int getWindDirection()
+  public int getWindDirection() 
   {
     
     try
@@ -106,7 +103,8 @@ public class WindDirSensor
     
 	if (windDir < 16) 
 		windDir = (windDir + NORTH_OFFSET) % 16;
-		
+	
+    this.update();
     return windDir;
   }
   
@@ -226,6 +224,6 @@ public class WindDirSensor
     if (debugFlag)
       System.out.println("Avg Wind Angle = " + angle);
     
-    return WeatherCruncher.formatValue(angle, 1);
+    return this.formatValue(angle, 1);
   }
 }

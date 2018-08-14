@@ -34,16 +34,16 @@ public abstract class AbstractSensor {
       sumSquares += value*value;
   }
   
-  public String getAverage()
+  public String getAverage(int digits)
   {
     if (samples == 0) return "U";
     
     float avg = sumValues/samples;
     
-    return this.formatValue(avg, 1);
+    return this.formatValue(avg, digits);
   }
   
-  public String getSigma()
+  public String getSigma(int digits)
   {
     if (samples == 0) return "U";
     
@@ -51,7 +51,7 @@ public abstract class AbstractSensor {
     float disp = sumSquares/samples;
     float sigma = (float)Math.sqrt(disp - avg*avg);
     
-    return this.formatValue(avg, 1);
+    return this.formatValue(avg, digits);
   }
   
   // short routine format a float to 'digit' decimals and convert to string

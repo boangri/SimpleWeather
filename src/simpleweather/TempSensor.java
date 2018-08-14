@@ -85,6 +85,6 @@ public class TempSensor extends AbstractSensor
   
   public String getTemp()
   { 
-    return getAverage();
+    return getAverage(1);
   }
 }

@@ -19,7 +19,7 @@ import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
 import com.dalsemi.onewire.container.*;
 
-public class BaroSensor
+public class BaroSensor extends AbstractSensor
 {
   // calibration constants
   private final double PRESSURE_GAIN   = 0.7171;
@@ -27,9 +27,9 @@ public class BaroSensor
   private final double PRESSURE_OFFSET = 26.2523 - 0.5962;
   
   // class variables
-  private DSPortAdapter adapter;
+  //private DSPortAdapter adapter;
   private OneWireContainer26 baroDevice = null;
-  private static boolean debugFlag = SimpleWeather.debugFlag;
+  //private static boolean debugFlag = SimpleWeather.debugFlag;
   
   
   public BaroSensor(DSPortAdapter adapter, String deviceID)
@@ -40,9 +40,9 @@ public class BaroSensor
   
   
   
-  public float getPressure() throws OneWireException
+  public float getPressure() throws SimpleWeatherException
   {
-    double pressure;
+    float pressure;
     
     if (debugFlag)
     {
@@ -50,8 +50,8 @@ public class BaroSensor
       System.out.print("  ID = " + baroDevice.getAddressAsString() + "\n");
     }
     
-//    try
-//    {
+    try
+    {
       byte[] state = baroDevice.readDevice();
       
       
@@ -66,11 +66,12 @@ public class BaroSensor
       
       
       // apply calibration
-      pressure = Vad * PRESSURE_GAIN + PRESSURE_OFFSET;
+      pressure = (float)(Vad * PRESSURE_GAIN + PRESSURE_OFFSET);
       
       // scale to mb if required
       //pressure *= 33.8640;
       
+      this.update(pressure);
       
       if (debugFlag)
       {
@@ -81,13 +82,17 @@ public class BaroSensor
         System.out.println("Baro Pressure  = " + pressure + "\n");
       }
       
-//    }
-//    catch (OneWireException e)
-//    {
-//      System.out.println("Error Reading Baro Sensor: " + e);
-//      pressure = -99.99;
-//    }
+    }
+    catch (OneWireException e)
+    {
+        throw new SimpleWeatherException("" + e);
+    }
     
-    return (float)pressure;
+    return pressure;
+  }
+  
+  public String getBaro()
+  { 
+    return getAverage(1);
   }
 }
