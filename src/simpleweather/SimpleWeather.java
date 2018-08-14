@@ -76,8 +76,6 @@ public class SimpleWeather
   public int solarErrorCnt = 0;
   
   private DSPortAdapter adapter;
-  private DataLogger logger;
-  private WeatherCruncher wc;
   private Wunderground wu;
   
   
@@ -135,8 +133,6 @@ public class SimpleWeather
       System.out.println("Error Finding Adapter: "+ e);
       System.exit(1);
     }
-    logger = new DataLogger(LOG_PATHNAME);
-    wc = new WeatherCruncher(this);
     wu = new Wunderground();
   }
   
@@ -317,7 +313,7 @@ public class SimpleWeather
         lastMinute = minute;
         
         if ((minute % 5 == 0) && (second == 0)) {
-            wu.send(this, wc);
+            wu.send(this);
           
             if (ts1ex) {ts1.resetAverages();}
             if (ts2ex) {ts2.resetAverages();}
