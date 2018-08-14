@@ -81,7 +81,7 @@ public class SimpleWeather
   
   // sensors
   public TempSensor ts1,ts2;
-  public TempSensor2 ts21,ts22;
+  public Temp2Sensor ts21,ts22;
   public WindSpeedSensor wss1;
   public WindDirSensor wds1;
   public HumiditySensor hs1;
@@ -159,8 +159,8 @@ public class SimpleWeather
     if (ts1ex) {ts1 = new TempSensor(adapter, TEMP_SENSOR1_ID, 1);}
     if (ts2ex) {ts2 = new TempSensor(adapter, TEMP_SENSOR2_ID, 2);}
    
-    if (ts21ex) {ts21 = new TempSensor2(adapter, TEMP1_ID, 1);}
-    if (ts22ex) {ts22 = new TempSensor2(adapter, TEMP2_ID, 2);}
+    if (ts21ex) {ts21 = new Temp2Sensor(adapter, TEMP1_ID, 1);}
+    if (ts22ex) {ts22 = new Temp2Sensor(adapter, TEMP2_ID, 2);}
     
     if (ws1ex) {wss1 = new WindSpeedSensor(adapter, WIND_SPD_ID);}
     if (ws1ex) {wds1 = new WindDirSensor(adapter, WIND_DIR_ID);}

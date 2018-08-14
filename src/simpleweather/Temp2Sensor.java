@@ -18,7 +18,7 @@ import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
 import com.dalsemi.onewire.container.*;
 
-public class TempSensor2 extends AbstractSensor
+public class Temp2Sensor extends AbstractSensor
 {
   // class variables
   //private DSPortAdapter adapter;
@@ -27,7 +27,7 @@ public class TempSensor2 extends AbstractSensor
 //  private float sumTemp;
 //  private int samples;
   
-  public TempSensor2(DSPortAdapter adapter, String deviceID, int num)
+  public Temp2Sensor(DSPortAdapter adapter, String deviceID, int num)
   {
     // get instances of the 1-wire devices
     tempDevice = new OneWireContainer28(adapter, deviceID);
