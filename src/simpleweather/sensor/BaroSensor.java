@@ -37,6 +37,7 @@ public class BaroSensor extends AbstractSensor
   {
     // get instances of the 1-wire devices
     baroDevice = new OneWireContainer26(adapter, deviceID);
+    this.resetAverages();
   }
   
   

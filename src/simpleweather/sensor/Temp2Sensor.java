@@ -51,6 +51,7 @@ public class Temp2Sensor extends AbstractSensor
     {
       System.out.println("Error Setting Resolution: " + e);
     }
+    this.resetAverages();
   }
   
   public float getTemperature() throws SimpleWeatherException

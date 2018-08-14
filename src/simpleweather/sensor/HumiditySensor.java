@@ -45,6 +45,7 @@ public class HumiditySensor extends AbstractSensor
   {
     // get an instance of the 1-wire device
     humidityDevice = new OneWireContainer26(adapter, deviceID);
+    this.resetAverages();
   }
   
   public float getHumidity() throws SimpleWeatherException 

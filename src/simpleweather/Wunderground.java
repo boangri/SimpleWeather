@@ -23,14 +23,16 @@ public class Wunderground implements Runnable {
     // class variables
     private BufferedReader in;
     private PrintStream out;
-    private static boolean debugFlag = true; //SimpleWeather.debugFlag;
+    private final static boolean debugFlag = true; //SimpleWeather.debugFlag;
     private MyFifo fifo = new MyFifo();
     private String url;
-    private Thread t;
+    private final Thread t;
     public int hits;
     public int failures;
+    private final SimpleWeather sw;
 
-    Wunderground() {
+    Wunderground(SimpleWeather sw) {
+        this.sw = sw;
         hits = failures = 0;
         t = new Thread(this, "Fifo processing");
         t.start();
@@ -40,7 +42,7 @@ public class Wunderground implements Runnable {
         return fifo.getCount();
     }
     
-    public void send(SimpleWeather sw) {
+    public void send() {
         //String url = "weatherstation.wunderground.com";
         StringBuffer sendUrl = new StringBuffer();
         url = sw.WWW;

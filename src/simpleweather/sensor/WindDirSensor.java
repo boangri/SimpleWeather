@@ -38,6 +38,7 @@ public class WindDirSensor extends AbstractSensor
   {
     // get instances of the 1-wire devices
     windDirDevice   = new OneWireContainer20(adapter, windDirDeviceID);
+    this.resetAverages();
   }
  
   /**

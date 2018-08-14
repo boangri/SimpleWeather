@@ -38,6 +38,7 @@ public class RainSensor extends AbstractSensor
     // get instances of the 1-wire devices
     rainDevice = new OneWireContainer1D(adapter, deviceID);
     RAIN_OFFSET = rain_offset;
+    this.resetAverages();
     
   }
   

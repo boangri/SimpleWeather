@@ -60,8 +60,8 @@ public class SimpleWeather
   public float windSpeed;
   public int windDir;
   public static String NORTH_OFFSET;
-  public static int lines;
-  public static Properties ps = new Properties();
+  public Properties ps;
+  public Enumeration sensors;
   public int secs = 0;
   public float wind_radius;
   public int humidityErrorCnt = 0;
@@ -99,33 +99,10 @@ public class SimpleWeather
   public static Boolean urlex = false;  
   public static Boolean relayex = false;  
   
-  public SimpleWeather()
+  public SimpleWeather(Properties ps)
   {
-    // get the 1-wire adapter
-    try
-    {
-      // get an instance of the 1-Wire adapter
-      adapter = OneWireAccessProvider.getAdapter(ADAPTER_TYPE, ONE_WIRE_SERIAL_PORT);
-      if (adapter != null)
-      {
-        System.out.println("Found Adapter: " + adapter.getAdapterName() +
-                " on Port " + adapter.getPortName());
-      }
-      else
-      {
-        System.out.println("Error: Unable to find 1-Wire adapter!");
-        System.exit(1);
-      }
-      
-      // reset the 1-Wire bus
-      resetBus();
-    }
-    catch (OneWireException e)
-    {
-      System.out.println("Error Finding Adapter: "+ e);
-      System.exit(1);
-    }
-    wu = new Wunderground();
+      this.ps = ps;
+    
   }
   
   
@@ -141,33 +118,7 @@ public class SimpleWeather
     InputStreamReader in = new InputStreamReader(System.in);
     //boolean relayOn = false;
     
-    wind_radius = Float.valueOf(WIND_RADIUS);
-    rain_offset = Float.valueOf(RAIN_OFFSET);
-
-    measurement = 0;
-
-    // initialize sensors
     
-    if (ts1ex) {ts1 = new TempSensor(adapter, TEMP_SENSOR1_ID, 1);}
-    if (ts2ex) {ts2 = new TempSensor(adapter, TEMP_SENSOR2_ID, 2);}
-   
-    if (ts21ex) {ts21 = new Temp2Sensor(adapter, TEMP1_ID, 1);}
-    if (ts22ex) {ts22 = new Temp2Sensor(adapter, TEMP2_ID, 2);}
-    
-    if (ws1ex) {wss1 = new WindSpeedSensor(adapter, WIND_SPD_ID);}
-    if (ws1ex) {wds1 = new WindDirSensor(adapter, WIND_DIR_ID);}
-    if (hs1ex) {hs1 = new HumiditySensor(adapter, HUMIDITY_SENSOR_ID);}
-    if (bs1ex) {bs1 = new BaroSensor(adapter, BARO_SENSOR_ID);}
-    if (rs1ex) {rs1 = new RainSensor(adapter, RAIN_COUNTER_ID, rain_offset);}
-    
-    if (ts1ex) {ts1.resetAverages();}
-    if (ts2ex) {ts2.resetAverages();}
-    if (ts21ex) {ts21.resetAverages();}
-    if (ts22ex) {ts22.resetAverages();}
-    if (ws1ex) {
-        wss1.resetAverages();
-        wds1.resetAverages();
-    }
     
     // main program loop
     while(!quit)
@@ -305,7 +256,7 @@ public class SimpleWeather
         lastMinute = minute;
         
         if ((minute % 5 == 0) && (second == 0)) {
-            wu.send(this);
+            wu.send();
           
             if (ts1ex) {ts1.resetAverages();}
             if (ts2ex) {ts2.resetAverages();}
@@ -352,71 +303,11 @@ public class SimpleWeather
   
   public static void main(String[] args) throws Exception
   {
-    InputStream f = new FileInputStream("station.properties");
-    InputStreamReader r = new InputStreamReader(f);
-    LineNumberReader l = new LineNumberReader(r);
-    String s ;
+    StationProperties sp = new StationProperties("station.properties");
 
-    for (lines = 1; (s = l.readLine()) != null; lines++) {
-      String key;
-      if (s.charAt(0) == '#') continue;
-      StringTokenizer tok = new StringTokenizer(s, "=");
-      key = tok.nextToken();
-      ps.put(key, tok.nextToken());
-    }
-    f.close();
-
-    Enumeration pse = ps.keys();
-    while (pse.hasMoreElements()) {
-      String str = (String) pse.nextElement();
-      System.out.println(str+"="+ps.getProperty(str));
-    }
-    TEMP_SENSOR1_ID = ps.getProperty("TEMP_SENSOR1_ID"); // = "A00008001B35DE10"; //WS-1  
-    if (TEMP_SENSOR1_ID != null) {
-	ts1ex = true;
-    }
-    TEMP_SENSOR2_ID = ps.getProperty("TEMP_SENSOR2_ID"); // = "0800080189EB8F10";
-    if (TEMP_SENSOR2_ID != null) {
-	ts2ex = true;
-    }
-    TEMP1_ID = ps.getProperty("TEMP1_ID");
-    if (TEMP1_ID != null) {
-	ts21ex = true;
-    }
-    TEMP2_ID = ps.getProperty("TEMP2_ID");
-    if (TEMP2_ID != null) {
-	ts22ex = true;
-    }
-    HUMIDITY_SENSOR_ID = ps.getProperty("HUMIDITY_SENSOR_ID");
-    if (HUMIDITY_SENSOR_ID != null) {
-	hs1ex = true;
-    }
-    WIND_SPD_ID = ps.getProperty("WIND_SPD_ID"); // = "1900000000F7C61D";
-    WIND_DIR_ID = ps.getProperty("WIND_DIR_ID"); // = "D600000007293320";
-    if ((WIND_SPD_ID != null) && (WIND_DIR_ID != null)) {
-	ws1ex = true;
-    }
-    BARO_SENSOR_ID = ps.getProperty("BARO_SENSOR_ID");
-    if (BARO_SENSOR_ID != null) {
-	bs1ex = true;
-    }
-    RAIN_COUNTER_ID = ps.getProperty("RAIN_COUNTER_ID");
-    if (RAIN_COUNTER_ID != null) {
-	rs1ex = true;
-    }
-    RAIN_OFFSET = ps.getProperty("RAIN_OFFSET");
-    ADAPTER_TYPE = ps.getProperty("ADAPTER_TYPE");
-    ONE_WIRE_SERIAL_PORT = ps.getProperty("ONE_WIRE_SERIAL_PORT");
-    NORTH_OFFSET = ps.getProperty("NORTH_OFFSET");
-    MEASUREMENT_INTERVAL = ps.getProperty("MEASUREMENT_INTERVAL");
+    Properties ps = sp.getStationProperties();
     
-    WWW = ps.getProperty("WWW");
-    URL = ps.getProperty("URL");
-    if (URL != null) {
-	urlex = true;
-    }
-    StationID = ps.getProperty("StationID");
-    WIND_RADIUS = ps.getProperty("WIND_RADIUS");
+
     
     System.out.println("Starting " + VERSION);
     
@@ -432,9 +323,12 @@ public class SimpleWeather
     try
     {
       // get instances to the primary object
-      SimpleWeather weatherServer   = new SimpleWeather();
+      
+      SimpleWeather sw   = new SimpleWeather(ps);
+      Wunderground wu = new Wunderground(sw);
       // call the main program loop
-      weatherServer.mainLoop();
+      sw.init();
+      sw.mainLoop();
     }
     catch(Throwable t)
     {
@@ -465,6 +359,117 @@ public class SimpleWeather
     catch (OneWireException e)
     {
       System.out.println("Exception Resetting the bus: " + e);
+    }
+  }
+  
+  private void init()
+  {
+      
+    Enumeration pse = ps.keys();
+    while (pse.hasMoreElements()) {
+      String str = (String) pse.nextElement();
+      System.out.println(str+"="+ps.getProperty(str));
+    }
+    
+    ADAPTER_TYPE = ps.getProperty("ADAPTER_TYPE");
+    ONE_WIRE_SERIAL_PORT = ps.getProperty("ONE_WIRE_SERIAL_PORT");
+    // get the 1-wire adapter
+    try
+    {
+      // get an instance of the 1-Wire adapter
+      adapter = OneWireAccessProvider.getAdapter(ADAPTER_TYPE, ONE_WIRE_SERIAL_PORT);
+      if (adapter != null)
+      {
+        System.out.println("Found Adapter: " + adapter.getAdapterName() +
+                " on Port " + adapter.getPortName());
+      }
+      else
+      {
+        System.out.println("Error: Unable to find 1-Wire adapter!");
+        System.exit(1);
+      }
+      
+      // reset the 1-Wire bus
+      resetBus();
+    }
+    catch (OneWireException e)
+    {
+      System.out.println("Error Finding Adapter: "+ e);
+      System.exit(1);
+    }
+    
+    TEMP_SENSOR1_ID = ps.getProperty("TEMP_SENSOR1_ID"); // = "A00008001B35DE10"; //WS-1  
+    if (TEMP_SENSOR1_ID != null) {
+	ts1ex = true;
+        ts1 = new TempSensor(adapter, TEMP_SENSOR1_ID, 1);
+        ts1.resetAverages();
+    }
+    TEMP_SENSOR2_ID = ps.getProperty("TEMP_SENSOR2_ID"); // = "0800080189EB8F10";
+    if (TEMP_SENSOR2_ID != null) {
+	ts2ex = true;
+        ts2 = new TempSensor(adapter, TEMP_SENSOR2_ID, 2);
+        ts1.resetAverages();
+    }
+    TEMP1_ID = ps.getProperty("TEMP1_ID");
+    if (TEMP1_ID != null) {
+	ts21ex = true;
+        ts21 = new Temp2Sensor(adapter, TEMP1_ID, 1);
+    }
+    TEMP2_ID = ps.getProperty("TEMP2_ID");
+    if (TEMP2_ID != null) {
+	ts22ex = true;
+        ts22 = new Temp2Sensor(adapter, TEMP2_ID, 2);
+    }
+    HUMIDITY_SENSOR_ID = ps.getProperty("HUMIDITY_SENSOR_ID");
+    if (HUMIDITY_SENSOR_ID != null) {
+	hs1ex = true;
+        hs1 = new HumiditySensor(adapter, HUMIDITY_SENSOR_ID);
+    }
+    WIND_SPD_ID = ps.getProperty("WIND_SPD_ID"); // = "1900000000F7C61D";
+    if (WIND_SPD_ID != null) {
+	ws1ex = true;
+        wss1 = new WindSpeedSensor(adapter, WIND_SPD_ID);
+    }
+    WIND_DIR_ID = ps.getProperty("WIND_DIR_ID"); // = "D600000007293320";
+    if (WIND_DIR_ID != null) {
+	ws1ex = true;
+        wds1 = new WindDirSensor(adapter, WIND_DIR_ID);
+    }
+    BARO_SENSOR_ID = ps.getProperty("BARO_SENSOR_ID");
+    if (BARO_SENSOR_ID != null) {
+	bs1ex = true;
+        bs1 = new BaroSensor(adapter, BARO_SENSOR_ID);
+    }
+    RAIN_COUNTER_ID = ps.getProperty("RAIN_COUNTER_ID");
+    if (RAIN_COUNTER_ID != null) {
+	rs1ex = true;
+        rs1 = new RainSensor(adapter, RAIN_COUNTER_ID, rain_offset);
+    }
+    RAIN_OFFSET = ps.getProperty("RAIN_OFFSET");
+    
+    NORTH_OFFSET = ps.getProperty("NORTH_OFFSET");
+    MEASUREMENT_INTERVAL = ps.getProperty("MEASUREMENT_INTERVAL");
+    
+    WWW = ps.getProperty("WWW");
+    URL = ps.getProperty("URL");
+    if (URL != null) {
+	urlex = true;
+    }
+    StationID = ps.getProperty("StationID");
+    WIND_RADIUS = ps.getProperty("WIND_RADIUS");
+    
+    wind_radius = Float.valueOf(WIND_RADIUS);
+    rain_offset = Float.valueOf(RAIN_OFFSET);
+
+    measurement = 0;
+    
+    //if (ts1ex) {ts1.resetAverages();}
+    //if (ts2ex) {ts2.resetAverages();}
+    if (ts21ex) {ts21.resetAverages();}
+    if (ts22ex) {ts22.resetAverages();}
+    if (ws1ex) {
+        wss1.resetAverages();
+        wds1.resetAverages();
     }
   }
 }

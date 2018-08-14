@@ -56,6 +56,7 @@ public class WindSpeedSensor extends AbstractSensor
       {
          System.out.print("Can't create Conatiner20\n");
       }
+      this.resetAverages();
     }  
   }
  
@@ -103,17 +104,6 @@ public class WindSpeedSensor extends AbstractSensor
     }
 
     return windSpeed;
-  }
-   
-  public void resetAverages()
-  {
-    samples = 0;
-    sumWind = 0f;
-    sumSquares = 0f;
-    
-    
-    if (debugFlag)
-      System.out.println("Wind Speed Averages Reset");
   }
   
   public void update()
