@@ -11,29 +11,17 @@
 
 package simpleweather;
 
-
-import simpleweather.sensor.WindDirSensor;
-import simpleweather.sensor.RainSensor;
-import simpleweather.sensor.Temp2Sensor;
-import simpleweather.sensor.HumiditySensor;
-import simpleweather.sensor.TempSensor;
-import simpleweather.sensor.WindSpeedSensor;
-import simpleweather.sensor.BaroSensor;
+import simpleweather.sensor.*;
 import java.util.*;
 import java.io.*;
 
 import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
-//import com.dalsemi.onewire.container.*;
-
-
 
 public class SimpleWeather
 {
-  // user constants
-  public static final String VERSION = "SimpleWeather 2.0.6 12.08.2018";
+  public static final String VERSION = "SimpleWeather 2.1.0 14.08.2018";
   public static String ONE_WIRE_SERIAL_PORT; 
-  public static final String LOG_PATHNAME = "WeatherLog.csv";
   
   // 1-Wire Devices
 
@@ -52,10 +40,8 @@ public class SimpleWeather
   public static String URL = "/cgi-bin/meteo_upd";
   public static String StationID = "main";
   public static String WIND_RADIUS;
-  
-  // class constants
 
-  public static String ADAPTER_TYPE ;//= "{DS9490}";
+  public static String ADAPTER_TYPE ;
   
   
   // class variables
@@ -84,7 +70,6 @@ public class SimpleWeather
   
   private DSPortAdapter adapter;
   private Wunderground wu;
-  
   
   // sensors
   public TempSensor ts1,ts2;
@@ -420,7 +405,7 @@ public class SimpleWeather
 	rs1ex = true;
     }
     RAIN_OFFSET = ps.getProperty("RAIN_OFFSET");
-    ADAPTER_TYPE = ps.getProperty("ADAPTER_TYPE");//= "{DS9490}";
+    ADAPTER_TYPE = ps.getProperty("ADAPTER_TYPE");
     ONE_WIRE_SERIAL_PORT = ps.getProperty("ONE_WIRE_SERIAL_PORT");
     NORTH_OFFSET = ps.getProperty("NORTH_OFFSET");
     MEASUREMENT_INTERVAL = ps.getProperty("MEASUREMENT_INTERVAL");
