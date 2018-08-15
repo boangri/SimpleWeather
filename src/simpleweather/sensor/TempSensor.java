@@ -21,34 +21,59 @@ public class TempSensor extends AbstractSensor
 {
   // class variables
   //private DSPortAdapter adapter;
-  private OneWireContainer10 tempDevice = null;
+  private TemperatureContainer tempDevice = null;
 //  private static boolean debugFlag = SimpleWeather.debugFlag;
 //  private float sumTemp;
 //  private int samples;
   
-  public TempSensor(DSPortAdapter adapter, String deviceID, int num)
+  public TempSensor(DSPortAdapter adapter, String deviceID, String name)
   {
     // get instances of the 1-wire devices
-    tempDevice = new OneWireContainer10(adapter, deviceID);
-	
-    // does this temp sensor have greater than .5 deg resolution?
-    try
-    {
-      if (tempDevice.hasSelectableTemperatureResolution())
-      {
-        // set resolution to max
-        byte[] state = tempDevice.readDevice();
-        tempDevice.setTemperatureResolution(OneWireContainer10.RESOLUTION_MAXIMUM, state);
-        tempDevice.writeDevice(state);
-        
-        if (debugFlag)
-          System.out.println("Temp Device Supports High Resolution");
-      }
-    }
-    catch (OneWireException e)
-    {
-      System.out.println("Error Setting Resolution: " + e);
-    }
+    switch (deviceID.substring(14, 16)) {
+        case "10":
+            tempDevice = new OneWireContainer10(adapter, deviceID);
+            try
+            {
+              if (tempDevice.hasSelectableTemperatureResolution())
+              {
+                // set resolution to max
+                byte[] state = tempDevice.readDevice();
+                tempDevice.setTemperatureResolution(OneWireContainer10.RESOLUTION_MAXIMUM, state);
+                tempDevice.writeDevice(state);
+
+                if (debugFlag)
+                  System.out.println("Temp Device Supports High Resolution");
+              }
+            }
+            catch (OneWireException e)
+            {
+              System.out.println("Error Setting Resolution: " + e);
+            }
+            break;
+        case "28":
+            tempDevice = new OneWireContainer28(adapter, deviceID);
+            // does this temp sensor have greater than .5 deg resolution?
+            try
+            {
+              if (tempDevice.hasSelectableTemperatureResolution())
+              {
+                // set resolution to max
+                byte[] state = tempDevice.readDevice();
+                tempDevice.setTemperatureResolution(OneWireContainer28.RESOLUTION_12_BIT, state);
+                tempDevice.writeDevice(state);
+
+                if (debugFlag)
+                  System.out.println("Temp Device Supports High Resolution");
+              }
+            }
+            catch (OneWireException e)
+            {
+              System.out.println("Error Setting Resolution: " + e);
+            }
+            break;
+        default:
+            System.out.println("Invalid device ID: " + deviceID);
+    } 
     this.resetAverage();
   }
   
@@ -63,8 +88,8 @@ public class TempSensor extends AbstractSensor
     
     if (debugFlag)
     {
-      System.out.print("Temperature: Device = " + tempDevice.getName());
-      System.out.print("  ID = " + tempDevice.getAddressAsString() + "\n");
+      System.out.print("Temperature: Device = " + ((OneWireContainer)tempDevice).getName());
+      System.out.print("  ID = " + ((OneWireContainer)tempDevice).getAddressAsString() + "\n");
     }
 
     try

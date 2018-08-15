@@ -157,22 +157,22 @@ public class SimpleWeather
     
     TEMP_SENSOR1_ID = ps.getProperty("TEMP_SENSOR1_ID"); // = "A00008001B35DE10"; //WS-1  
     if (TEMP_SENSOR1_ID != null) {
-        s = new TempSensor(adapter, TEMP_SENSOR1_ID, 1);
+        s = new TempSensor(adapter, TEMP_SENSOR1_ID, "t1");
         sensor_vector.addElement(s);
     }
     TEMP_SENSOR2_ID = ps.getProperty("TEMP_SENSOR2_ID"); // = "0800080189EB8F10";
     if (TEMP_SENSOR2_ID != null) {
-        s = new TempSensor(adapter, TEMP_SENSOR2_ID, 2);
+        s = new TempSensor(adapter, TEMP_SENSOR2_ID, "t2");
         sensor_vector.addElement(s);
     }
     TEMP1_ID = ps.getProperty("TEMP1_ID");
     if (TEMP1_ID != null) {
-        s = new Temp2Sensor(adapter, TEMP1_ID, 1);
+        s = new TempSensor(adapter, TEMP1_ID, "t21");
         sensor_vector.addElement(s);
     }
     TEMP2_ID = ps.getProperty("TEMP2_ID");
     if (TEMP2_ID != null) {
-        s = new Temp2Sensor(adapter, TEMP2_ID, 2);
+        s = new TempSensor(adapter, TEMP2_ID, "t22");
         sensor_vector.addElement(s);
     }
     HUMIDITY_SENSOR_ID = ps.getProperty("HUMIDITY_SENSOR_ID");
