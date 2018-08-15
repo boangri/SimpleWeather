@@ -11,14 +11,18 @@ import simpleweather.SimpleWeather;
  *
  * @author Boris
  */
-public abstract class AbstractSensor {
-  protected DSPortAdapter adapter;
+public abstract class AbstractSensor implements ISensor {
+  
   protected static boolean debugFlag = SimpleWeather.debugFlag;
   protected float sumValues;
   protected float sumSquares;
   protected int samples;
   
-  public void resetAverages()
+  abstract public void update();
+  abstract public String getLabel();
+  abstract public String getValue();
+  
+  public void resetAverage()
   {
     samples = 0;
     sumValues = 0f;
@@ -28,7 +32,7 @@ public abstract class AbstractSensor {
       System.out.println("Averages Reset");
   }
   
-  protected void update(float value)
+  protected void updateAverage(float value)
   {
       samples++;
       sumValues += value;

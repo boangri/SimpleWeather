@@ -38,7 +38,7 @@ public class RainSensor extends AbstractSensor
     // get instances of the 1-wire devices
     rainDevice = new OneWireContainer1D(adapter, deviceID);
     RAIN_OFFSET = rain_offset;
-    this.resetAverages();
+    this.resetAverage();
     
   }
   
@@ -112,8 +112,29 @@ public class RainSensor extends AbstractSensor
   /**
    *
    */
-  public void resetAverages()
+  public void resetAverage()
   {
     lastCount = currentCount;
+  }
+  
+  public void update()
+  {
+    try {
+        float data = this.getRainCount();
+        System.out.println("Rain = " + data + "in");
+        updateAverage(data);
+    } catch (SimpleWeatherException e) {
+        System.out.println("Error Reading Rain Counter: " + e);   
+    }
+  }
+  
+  public String getLabel()
+  {
+      return "rain";
+  }
+  
+  public String getValue()
+  {
+      return getAverage(3);
   }
 }

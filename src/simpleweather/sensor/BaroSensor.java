@@ -37,7 +37,7 @@ public class BaroSensor extends AbstractSensor
   {
     // get instances of the 1-wire devices
     baroDevice = new OneWireContainer26(adapter, deviceID);
-    this.resetAverages();
+    this.resetAverage();
   }
   
   
@@ -73,8 +73,6 @@ public class BaroSensor extends AbstractSensor
       // scale to mb if required
       //pressure *= 33.8640;
       
-      this.update(pressure);
-      
       if (debugFlag)
       {
         System.out.println("Sensor Output  = " + Vad + " Volts");
@@ -96,5 +94,26 @@ public class BaroSensor extends AbstractSensor
   public String getBaro()
   { 
     return getAverage(1);
+  }
+  
+  public void update()
+  {
+    try {
+        float data = this.getPressure();
+        System.out.println("Pressure = " + data + " inHg");
+        updateAverage(data);
+    } catch (SimpleWeatherException e) {
+        System.out.println("Error Reading Pressure: " + e);
+    }
+  }
+  
+  public String getLabel()
+  {
+      return "baromin";
+  }
+  
+  public String getValue()
+  {
+      return getAverage(1);
   }
 }

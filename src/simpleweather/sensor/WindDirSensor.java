@@ -38,18 +38,16 @@ public class WindDirSensor extends AbstractSensor
   {
     // get instances of the 1-wire devices
     windDirDevice   = new OneWireContainer20(adapter, windDirDeviceID);
-    this.resetAverages();
+    this.resetAverage();
   }
  
   /**
    * 
    * @return 
    */
-  public int getWindDirection() 
+  public int getWindDirection() throws OneWireException
   {
     
-    try
-    {
       if (debugFlag)
       {
         System.out.print("Wind Dir: Device = " + windDirDevice.getName());
@@ -96,17 +94,11 @@ public class WindDirSensor extends AbstractSensor
         System.out.println("Wind Dir AtoD Ch D = " + chDVolts);
         System.out.println("Wind Direction     = " + windDir + "\n");
       }
-    }
-    catch (OneWireException e)
-    {
-      System.out.println("Error Reading Wind Direction: " + e);
-      windDir = 16;
-    }
+
     
 	if (windDir < 16) 
 		windDir = (windDir + NORTH_OFFSET) % 16;
 	
-    this.update();
     return windDir;
   }
   
@@ -175,7 +167,7 @@ public class WindDirSensor extends AbstractSensor
     return direction[input];
   }
     
-  public void resetAverages()
+  public void resetAverage()
   {
     samples = 0;
     sumSin = 0;
@@ -185,7 +177,7 @@ public class WindDirSensor extends AbstractSensor
       System.out.println("Wind Direction Averages Reset");
   }
   
-  public void update()
+  public void updateAverage()
   { 
     if (windDir == 16) return;
     
@@ -228,4 +220,29 @@ public class WindDirSensor extends AbstractSensor
     
     return this.formatValue(angle, 1);
   }
+  
+  public void update()
+  {
+    try {
+        float data = this.getWindDirection();
+        System.out.println("Temperature = " + data + " degs");
+        updateAverage(data);
+    } catch (OneWireException e) {
+        System.out.println("Error Reading Wind Direction: " + e);
+    }
+  }
+  
+  public String getLabel()
+  {
+      return "wdir";
+  }
+  
+  public String getValue()
+  {
+      return getWindDirAvg();
+  }
 }
+
+//sendUrl.append("&wspd=" + sw.wss1.getWind());
+//            sendUrl.append("&wspdpk=" + sw.wss1.getWindSigma());
+//            sendUrl.append("&wdir=" + sw.wds1.getWindDirAvg());

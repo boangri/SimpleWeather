@@ -16,6 +16,8 @@ import java.net.*;
 import java.io.*;
 //import java.util.*;
 import boangri.*;
+import java.util.Enumeration;
+import simpleweather.sensor.ISensor;
 
 public class Wunderground implements Runnable {
     // user constants
@@ -30,7 +32,8 @@ public class Wunderground implements Runnable {
     public int hits;
     public int failures;
     private final SimpleWeather sw;
-
+    private Enumeration sensors;
+    
     Wunderground(SimpleWeather sw) {
         this.sw = sw;
         hits = failures = 0;
@@ -56,49 +59,55 @@ public class Wunderground implements Runnable {
         sendUrl.append("&ts=" + sw.timestamp);
         sendUrl.append("&mn=" + sw.measurement);
 
-        // Temperature
-        //sendUrl.append("&tempf=" + wc.getTemp());
-        if (sw.ts1ex) {
-            sendUrl.append("&temp1=" + sw.ts1.getTemp());
-        }
-        if (sw.ts2ex) {
-            sendUrl.append("&temp2=" + sw.ts2.getTemp());
-        }
-        // temp DS18B20
-        if (sw.ts21ex) {
-            sendUrl.append("&temp21=" + sw.ts21.getTemp());
-        }
-        if (sw.ts22ex) {
-            sendUrl.append("&temp22=" + sw.ts22.getTemp());
-        }
-        // Humidity
-        if (sw.hs1ex) {
-            sendUrl.append("&humidity=" + sw.hs1.getHum());
-            // Dewpoint
-            //sendUrl.append("&dewptf=" + wc.getDP());
-            // Solar radiation level, percent
-            //sendUrl.append("&solar=" + wc.getSolar());
-        }
-
-        // Wind Speed and Direction
-        if (sw.ws1ex) {
-            sendUrl.append("&wspd=" + sw.wss1.getWind());
-            sendUrl.append("&wspdpk=" + sw.wss1.getWindSigma());
-            sendUrl.append("&wdir=" + sw.wds1.getWindDirAvg());
-        }
-
-        // Baro Pressure
-        if (sw.bs1ex) {
-            sendUrl.append("&baromin=" + sw.bs1.getBaro());
-        }
-
-        // Rain
-        if (sw.rs1ex) {
-            sendUrl.append("&rainin=" + sw.rs1.getRainRate());
-            //sendUrl.append("&dailyrainin=" + wc.getRain24());
-            sendUrl.append("&raincnt=" + sw.rs1.getRain());
-            //sendUrl.append("&pulse=" + sw.pulse);
-        }
+        sensors = sw.sensor_vector.elements();
+        
+        while(sensors.hasMoreElements()) {
+            ISensor s = (ISensor) sensors.nextElement();
+            sendUrl.append("&"+s.getLabel()+"="+s.getValue());
+        } 
+//        // Temperature
+//        //sendUrl.append("&tempf=" + wc.getTemp());
+//        if (sw.ts1ex) {
+//            sendUrl.append("&temp1=" + sw.ts1.getTemp());
+//        }
+//        if (sw.ts2ex) {
+//            sendUrl.append("&temp2=" + sw.ts2.getTemp());
+//        }
+//        // temp DS18B20
+//        if (sw.ts21ex) {
+//            sendUrl.append("&temp21=" + sw.ts21.getTemp());
+//        }
+//        if (sw.ts22ex) {
+//            sendUrl.append("&temp22=" + sw.ts22.getTemp());
+//        }
+//        // Humidity
+//        if (sw.hs1ex) {
+//            sendUrl.append("&humidity=" + sw.hs1.getHum());
+//            // Dewpoint
+//            //sendUrl.append("&dewptf=" + wc.getDP());
+//            // Solar radiation level, percent
+//            //sendUrl.append("&solar=" + wc.getSolar());
+//        }
+//
+//        // Wind Speed and Direction
+//        if (sw.ws1ex) {
+//            sendUrl.append("&wspd=" + sw.wss1.getWind());
+//            sendUrl.append("&wspdpk=" + sw.wss1.getWindSigma());
+//            sendUrl.append("&wdir=" + sw.wds1.getWindDirAvg());
+//        }
+//
+//        // Baro Pressure
+//        if (sw.bs1ex) {
+//            sendUrl.append("&baromin=" + sw.bs1.getBaro());
+//        }
+//
+//        // Rain
+//        if (sw.rs1ex) {
+//            sendUrl.append("&rainin=" + sw.rs1.getRainRate());
+//            //sendUrl.append("&dailyrainin=" + wc.getRain24());
+//            sendUrl.append("&raincnt=" + sw.rs1.getRain());
+//            //sendUrl.append("&pulse=" + sw.pulse);
+//        }
 
         // Software Type & action
         //sendUrl.append("&softwaretype=tws&action=updateraw HTTP//1.1\r\nConnection: keep-alive\r\n\r\n");

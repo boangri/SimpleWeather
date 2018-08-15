@@ -45,7 +45,7 @@ public class HumiditySensor extends AbstractSensor
   {
     // get an instance of the 1-wire device
     humidityDevice = new OneWireContainer26(adapter, deviceID);
-    this.resetAverages();
+    this.resetAverage();
   }
   
   public float getHumidity() throws SimpleWeatherException 
@@ -104,7 +104,6 @@ public class HumiditySensor extends AbstractSensor
       throw new SimpleWeatherException("" + e);
     }
 
-    this.update(humidity);
     return humidity;
   }
   
@@ -187,4 +186,24 @@ public class HumiditySensor extends AbstractSensor
     {
         return getAverage(1);
     }
+    
+    public void update()
+  {
+    try {
+        float data = this.getHumidity();
+        System.out.println("Humidity = " + data + "%");
+        updateAverage(data);
+    } catch (SimpleWeatherException e) {
+        System.out.println("Error Reading Humidity: " + e);
+    }
+  }
+    public String getLabel()
+  {
+      return "humidity";
+  }
+  
+  public String getValue()
+  {
+      return getAverage(1);
+  }
 }

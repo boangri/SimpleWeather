@@ -17,7 +17,7 @@ import com.dalsemi.onewire.adapter.*;
 import com.dalsemi.onewire.container.*;
 import simpleweather.SimpleWeatherException;
 
-public class TempSensor extends AbstractSensor
+public class TempSensor extends AbstractSensor 
 {
   // class variables
   //private DSPortAdapter adapter;
@@ -49,7 +49,7 @@ public class TempSensor extends AbstractSensor
     {
       System.out.println("Error Setting Resolution: " + e);
     }
-    this.resetAverages();
+    this.resetAverage();
   }
   
   public float getTemperature() throws SimpleWeatherException
@@ -75,7 +75,7 @@ public class TempSensor extends AbstractSensor
       state = tempDevice.readDevice();
       temperature = (float)tempDevice.getTemperature(state);
 
-      this.update(temperature);
+      this.updateAverage(temperature);
     }
     catch (OneWireException e)
     {
@@ -88,5 +88,26 @@ public class TempSensor extends AbstractSensor
   public String getTemp()
   { 
     return getAverage(1);
+  }
+  
+  public void update()
+  {
+    try {
+        float temp = this.getTemperature();
+        System.out.println("Temperature = " + temp + " degs C");
+        updateAverage(temp);
+    } catch (SimpleWeatherException e) {
+        System.out.println("Error Reading Temperature: " + e);
+    }
+  }
+  
+  public String getLabel()
+  {
+      return "temp";
+  }
+  
+  public String getValue()
+  {
+      return getAverage(1);
   }
 }

@@ -56,21 +56,16 @@ public class WindSpeedSensor extends AbstractSensor
       {
          System.out.print("Can't create Conatiner20\n");
       }
-      this.resetAverages();
+      this.resetAverage();
     }  
   }
  
  
-  public float getWindSpeed() throws SimpleWeatherException
+  public float getWindSpeed() throws OneWireException
   {
     //float windSpeed = 0f;
     
-    if (windSpdDevice == null) {
-        throw new SimpleWeatherException("No wind speed device found");
-    }
     
-    try
-    {
       if (debugFlag)
       {
         System.out.print("Wind Speed: Device = " + windSpdDevice.getName());
@@ -97,16 +92,11 @@ public class WindSpeedSensor extends AbstractSensor
       // remember count & time
       lastCount = currentCount;
       lastTicks = currentTicks;
-    }
-    catch (OneWireException e)
-    {
-      throw new SimpleWeatherException("" + e);
-    }
 
     return windSpeed;
   }
   
-  public void update()
+  public void updateAverage()
   { 
     samples++;
     
@@ -137,4 +127,25 @@ public class WindSpeedSensor extends AbstractSensor
     
     return this.formatValue((float)sigma, 1);
   } 
+  
+  public void update()
+  {
+    try {
+        float data = this.getWindSpeed();
+        System.out.println("Temperature = " + data + " degs");
+        updateAverage(data);
+    } catch (OneWireException e) {
+        System.out.println("Error Reading Wind Speed: " + e);
+    }
+  }
+  
+  public String getLabel()
+  {
+      return "";
+  }
+  
+  public String getValue()
+  {
+      return getAverage(1);
+  }
 }
