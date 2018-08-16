@@ -14,7 +14,7 @@ package simpleweather;
 
 import java.net.*;
 import java.io.*;
-//import java.util.*;
+import java.util.*;
 import boangri.*;
 import java.util.Enumeration;
 import simpleweather.sensor.ISensor;
@@ -63,7 +63,15 @@ public class Wunderground implements Runnable {
         
         while(sensors.hasMoreElements()) {
             ISensor s = (ISensor) sensors.nextElement();
-            sendUrl.append("&"+s.getLabel()+"="+s.getValue());
+            Properties res = s.getResults();
+            Enumeration er;
+            er = res.keys();
+            while (er.hasMoreElements()) {
+                String key = (String)er.nextElement();
+                String value = res.getProperty(key);
+                sendUrl.append("&"+key+"="+value);
+            }
+            
         } 
 //        // Temperature
 //        //sendUrl.append("&tempf=" + wc.getTemp());

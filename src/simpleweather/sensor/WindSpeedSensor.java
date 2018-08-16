@@ -16,6 +16,7 @@ package simpleweather.sensor;
 import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
 import com.dalsemi.onewire.container.*;
+import java.util.Properties;
 import simpleweather.SimpleWeather;
 import simpleweather.SimpleWeatherException;
 
@@ -128,6 +129,17 @@ public class WindSpeedSensor extends AbstractSensor
     return this.formatValue((float)sigma, 1);
   } 
   
+  public String getWindPk()
+  {
+    if (samples == 0) return ("U");
+    
+    float avg = sumWind/samples;
+    float disp = sumSquares/samples;
+    float sigma = (float)Math.sqrt(disp - avg*avg);
+    
+    return this.formatValue(avg + sigma, 1);
+  } 
+  
   public void update()
   {
     try {
@@ -139,13 +151,14 @@ public class WindSpeedSensor extends AbstractSensor
     }
   }
   
-  public String getLabel()
+  public Properties getResults()
   {
-      return "";
-  }
-  
-  public String getValue()
-  {
-      return getAverage(1);
+//            sendUrl.append("&wspd=" + sw.wss1.getWind());
+//            sendUrl.append("&wspdpk=" + sw.wss1.getWindSigma());
+      Properties p = new Properties();
+      p.setProperty("wspd", getWind());
+      p.setProperty("wspdpk", getWindPk());
+      
+      return p;
   }
 }

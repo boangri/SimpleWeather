@@ -5,6 +5,7 @@ import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
 import com.dalsemi.onewire.container.*;
 import java.util.StringTokenizer;
+import java.util.Properties;
 import simpleweather.SimpleWeather;
 
 /**
@@ -19,8 +20,7 @@ public abstract class AbstractSensor implements ISensor {
   protected int samples;
   
   abstract public void update();
-  abstract public String getLabel();
-  abstract public String getValue();
+  //abstract public Properties getResults();
   
   public void resetAverage()
   {

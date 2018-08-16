@@ -16,6 +16,7 @@ package simpleweather.sensor;
 import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
 import com.dalsemi.onewire.container.*;
+import java.util.Properties;
 import simpleweather.SimpleWeather;
 
 
@@ -232,17 +233,11 @@ public class WindDirSensor extends AbstractSensor
     }
   }
   
-  public String getLabel()
+  public Properties getResults()
   {
-      return "wdir";
-  }
-  
-  public String getValue()
-  {
-      return getWindDirAvg();
+      Properties p = new Properties();
+      p.setProperty("wdir", getWindDirAvg());
+      
+      return p;
   }
 }
-
-//sendUrl.append("&wspd=" + sw.wss1.getWind());
-//            sendUrl.append("&wspdpk=" + sw.wss1.getWindSigma());
-//            sendUrl.append("&wdir=" + sw.wds1.getWindDirAvg());

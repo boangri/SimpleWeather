@@ -17,6 +17,7 @@ package simpleweather.sensor;
 import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
 import com.dalsemi.onewire.container.*;
+import java.util.Properties;
 import simpleweather.SimpleWeatherException;
 
 
@@ -32,6 +33,7 @@ public class RainSensor extends AbstractSensor
   private long currentCount = 0;
   private float rain;
   private float rainRate;
+  private final String name = "rain";
   
   public RainSensor(DSPortAdapter adapter, String deviceID, float rain_offset)
   {
@@ -128,13 +130,12 @@ public class RainSensor extends AbstractSensor
     }
   }
   
-  public String getLabel()
+  public Properties getResults()
   {
-      return "rain";
-  }
-  
-  public String getValue()
-  {
-      return getAverage(3);
+      Properties p = new Properties();
+      p.setProperty("rainin", getRainRate());
+      p.setProperty("raincnt", getRain());
+      
+      return p;
   }
 }

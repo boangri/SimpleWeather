@@ -20,7 +20,7 @@ import com.dalsemi.onewire.adapter.*;
 
 public class SimpleWeather
 {
-  public static final String VERSION = "SimpleWeather 2.1.1 15.08.2018";
+  public static final String VERSION = "SimpleWeather 2.1.2 16.08.2018";
   public static String ONE_WIRE_SERIAL_PORT; 
   
   // 1-Wire Devices

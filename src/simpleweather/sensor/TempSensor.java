@@ -16,6 +16,7 @@ import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
 import com.dalsemi.onewire.container.*;
 import simpleweather.SimpleWeatherException;
+import java.util.Properties;
 
 public class TempSensor extends AbstractSensor 
 {
@@ -25,9 +26,11 @@ public class TempSensor extends AbstractSensor
 //  private static boolean debugFlag = SimpleWeather.debugFlag;
 //  private float sumTemp;
 //  private int samples;
+  private String name;
   
   public TempSensor(DSPortAdapter adapter, String deviceID, String name)
   {
+      this.name = name;
     // get instances of the 1-wire devices
     switch (deviceID.substring(14, 16)) {
         case "10":
@@ -126,13 +129,11 @@ public class TempSensor extends AbstractSensor
     }
   }
   
-  public String getLabel()
+  public Properties getResults()
   {
-      return "temp";
-  }
-  
-  public String getValue()
-  {
-      return getAverage(1);
+      Properties p = new Properties();
+      p.setProperty(name, getAverage(1));
+      
+      return p;
   }
 }

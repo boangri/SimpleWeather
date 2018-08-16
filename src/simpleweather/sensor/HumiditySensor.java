@@ -18,6 +18,7 @@ package simpleweather.sensor;
 import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
 import com.dalsemi.onewire.container.*;
+import java.util.Properties;
 import simpleweather.SimpleWeatherException;
 
 
@@ -30,6 +31,7 @@ public class HumiditySensor extends AbstractSensor
   private final float HUMIDITY_GAIN   = 0.887f;
   private final float SOLAR_OFFSET = 0.0f;
   private final float SOLAR_GAIN   = 0.967f;
+  private final String name = "humidity";
   
   // class variables
   //private DSPortAdapter adapter;
@@ -197,13 +199,12 @@ public class HumiditySensor extends AbstractSensor
         System.out.println("Error Reading Humidity: " + e);
     }
   }
-    public String getLabel()
+    
+  public Properties getResults()
   {
-      return "humidity";
-  }
-  
-  public String getValue()
-  {
-      return getAverage(1);
+      Properties p = new Properties();
+      p.setProperty(name, getAverage(1));
+      
+      return p;
   }
 }

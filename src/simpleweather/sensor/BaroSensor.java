@@ -18,6 +18,7 @@ package simpleweather.sensor;
 import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
 import com.dalsemi.onewire.container.*;
+import java.util.Properties;
 import simpleweather.SimpleWeatherException;
 
 public class BaroSensor extends AbstractSensor
@@ -31,6 +32,7 @@ public class BaroSensor extends AbstractSensor
   //private DSPortAdapter adapter;
   private OneWireContainer26 baroDevice = null;
   //private static boolean debugFlag = SimpleWeather.debugFlag;
+  private final String name = "baromin";
   
   
   public BaroSensor(DSPortAdapter adapter, String deviceID)
@@ -107,13 +109,11 @@ public class BaroSensor extends AbstractSensor
     }
   }
   
-  public String getLabel()
+  public Properties getResults()
   {
-      return "baromin";
-  }
-  
-  public String getValue()
-  {
-      return getAverage(1);
+      Properties p = new Properties();
+      p.setProperty(name, getAverage(1));
+      
+      return p;
   }
 }

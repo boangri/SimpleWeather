@@ -5,6 +5,7 @@
  */
 
 package simpleweather.sensor;
+import java.util.Properties;
 
 /**
  *
@@ -13,6 +14,7 @@ package simpleweather.sensor;
 public interface ISensor {
     public void update();
     public void resetAverage();
-    public String getLabel();
-    public String getValue();
+//    public String getLabel();
+//    public String getValue();
+    public Properties getResults();
 }
