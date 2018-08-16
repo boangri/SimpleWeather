@@ -32,8 +32,6 @@ public class BaroSensor extends AbstractSensor
   //private DSPortAdapter adapter;
   private OneWireContainer26 baroDevice = null;
   //private static boolean debugFlag = SimpleWeather.debugFlag;
-  private final String name = "baromin";
-  
   
   public BaroSensor(DSPortAdapter adapter, String deviceID)
   {
@@ -112,7 +110,7 @@ public class BaroSensor extends AbstractSensor
   public Properties getResults()
   {
       Properties p = new Properties();
-      p.setProperty(name, getAverage(1));
+      p.setProperty("baromin", getAverage(1));
       
       return p;
   }

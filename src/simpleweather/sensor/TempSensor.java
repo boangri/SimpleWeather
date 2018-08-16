@@ -26,7 +26,6 @@ public class TempSensor extends AbstractSensor
 //  private static boolean debugFlag = SimpleWeather.debugFlag;
 //  private float sumTemp;
 //  private int samples;
-  private String name;
   
   public TempSensor(DSPortAdapter adapter, String deviceID, String name)
   {

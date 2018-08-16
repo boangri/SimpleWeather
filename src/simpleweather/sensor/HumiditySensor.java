@@ -31,7 +31,6 @@ public class HumiditySensor extends AbstractSensor
   private final float HUMIDITY_GAIN   = 0.887f;
   private final float SOLAR_OFFSET = 0.0f;
   private final float SOLAR_GAIN   = 0.967f;
-  private final String name = "humidity";
   
   // class variables
   //private DSPortAdapter adapter;
@@ -203,7 +202,7 @@ public class HumiditySensor extends AbstractSensor
   public Properties getResults()
   {
       Properties p = new Properties();
-      p.setProperty(name, getAverage(1));
+      p.setProperty("humidity", getAverage(1));
       
       return p;
   }

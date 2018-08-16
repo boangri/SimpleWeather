@@ -26,12 +26,9 @@ public class WindDirSensor extends AbstractSensor
   // calibration constants
   private static final int NORTH_OFFSET = Integer.parseInt(SimpleWeather.NORTH_OFFSET);
   
-  // class variables
-  //private DSPortAdapter adapter;
   private long lastCount = 0;
   private long lastTicks = 0;
   private OneWireContainer20   windDirDevice = null;
-  public float windSpeed = 0f;
   public int windDir = 16;
   private double sumSin, sumCos;
  
@@ -203,7 +200,6 @@ public class WindDirSensor extends AbstractSensor
     double avgSin = sumSin/r;
     double avgCos = sumCos/r;
     
-    // convert average to degrees
     float angle = (float)Math.toDegrees(Math.asin(avgSin));
     
     // correct for the quadrant
@@ -212,9 +208,6 @@ public class WindDirSensor extends AbstractSensor
     
     else if (avgSin < 0)
       angle = 360 + angle;
-    
-    // convert back to 0 to 15 value
-    //int dir = (int)((angle + 0.5)/22.5);
     
     if (debugFlag)
       System.out.println("Avg Wind Angle = " + angle);

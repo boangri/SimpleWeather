@@ -18,9 +18,10 @@ public abstract class AbstractSensor implements ISensor {
   protected float sumValues;
   protected float sumSquares;
   protected int samples;
+  protected String name;
   
   abstract public void update();
-  //abstract public Properties getResults();
+  abstract public Properties getResults();
   
   public void resetAverage()
   {

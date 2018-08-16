@@ -20,51 +20,27 @@ import com.dalsemi.onewire.adapter.*;
 
 public class SimpleWeather
 {
-  public static final String VERSION = "SimpleWeather 2.1.2 16.08.2018";
+  public static final String VERSION = "SimpleWeather 2.1.3 16.08.2018";
   public static String ONE_WIRE_SERIAL_PORT; 
   
   // 1-Wire Devices
   
-  private static String TEMP1_ID; // DS18B20 
-  private static String TEMP2_ID; // DS18B20 
-  private static String TEMP_SENSOR1_ID; // WS-1 temp. sensor 
-  private static String TEMP_SENSOR2_ID; // outdoor temp. (pagoda)
-  private static String HUMIDITY_SENSOR_ID;    
-  private static String WIND_SPD_ID;  
-  private static String WIND_DIR_ID; 
-  private static String BARO_SENSOR_ID;
-  private static String RAIN_COUNTER_ID;
   private static String RAIN_OFFSET;
   private static String MEASUREMENT_INTERVAL; //  Interval between measurements in seconds. Must divide 60.
   public static String WWW = "www.xland.ru";
   public static String URL = "/cgi-bin/meteo_upd";
   public static String StationID = "main";
   public static String WIND_RADIUS;
-
+  public static String NORTH_OFFSET;
   public static String ADAPTER_TYPE ;
-  public Vector sensor_vector = new Vector(10, 1);
   
-  
-  // class variables
   public static boolean debugFlag = false;
-  public float temp1, temp2;
-  public float temp21, temp22;
-  public float humidity;
-  public float solarLevel;
-  public float dewpoint;
-  public float pressure;
-  public float rain;
-  public long pulse;
   public long timestamp;
   public int measurement;
-  public float rain_offset;
-  public float windSpeed;
-  public int windDir;
-  public static String NORTH_OFFSET;
   public Properties ps;
   public Enumeration sensors;
+  public Vector sensor_vector = new Vector(10, 1);
   public int secs = 0;
-  public float wind_radius;
   public int humidityErrorCnt = 0;
   public int pressureErrorCnt = 0;
   public int solarErrorCnt = 0;
@@ -75,7 +51,6 @@ public class SimpleWeather
   public SimpleWeather(Properties ps)
   {
       this.ps = ps;
-    
   }
   
   public static void main(String[] args) throws Exception
@@ -83,8 +58,6 @@ public class SimpleWeather
     StationProperties sp = new StationProperties("station.properties");
 
     Properties ps = sp.getStationProperties();
-    
-
     
     System.out.println("Starting " + VERSION);
     
@@ -127,6 +100,7 @@ public class SimpleWeather
       System.out.println(str+"="+ps.getProperty(str));
     }
     ISensor s;
+    String ID;
     
     ADAPTER_TYPE = ps.getProperty("ADAPTER_TYPE");
     ONE_WIRE_SERIAL_PORT = ps.getProperty("ONE_WIRE_SERIAL_PORT");
@@ -155,52 +129,62 @@ public class SimpleWeather
       System.exit(1);
     }
     
-    TEMP_SENSOR1_ID = ps.getProperty("TEMP_SENSOR1_ID"); // = "A00008001B35DE10"; //WS-1  
-    if (TEMP_SENSOR1_ID != null) {
-        s = new TempSensor(adapter, TEMP_SENSOR1_ID, "t1");
+    ID = ps.getProperty("TEMP_SENSOR1_ID"); // = "A00008001B35DE10"; //WS-1  
+    if (ID != null) {
+        s = new TempSensor(adapter, ID, "temp1");
         sensor_vector.addElement(s);
     }
-    TEMP_SENSOR2_ID = ps.getProperty("TEMP_SENSOR2_ID"); // = "0800080189EB8F10";
-    if (TEMP_SENSOR2_ID != null) {
-        s = new TempSensor(adapter, TEMP_SENSOR2_ID, "t2");
+    ID = ps.getProperty("TEMP_SENSOR2_ID"); // = "A00008001B35DE10"; //WS-1  
+    if (ID != null) {
+        s = new TempSensor(adapter, ID, "temp2");
         sensor_vector.addElement(s);
     }
-    TEMP1_ID = ps.getProperty("TEMP1_ID");
-    if (TEMP1_ID != null) {
-        s = new TempSensor(adapter, TEMP1_ID, "t21");
+    ID = ps.getProperty("TEMP_SENSOR3_ID"); // = "A00008001B35DE10"; //WS-1  
+    if (ID != null) {
+        s = new TempSensor(adapter, ID, "temp3");
         sensor_vector.addElement(s);
     }
-    TEMP2_ID = ps.getProperty("TEMP2_ID");
-    if (TEMP2_ID != null) {
-        s = new TempSensor(adapter, TEMP2_ID, "t22");
+    ID = ps.getProperty("TEMP_SENSOR4_ID"); // = "A00008001B35DE10"; //WS-1  
+    if (ID != null) {
+        s = new TempSensor(adapter, ID, "temp4");
         sensor_vector.addElement(s);
     }
-    HUMIDITY_SENSOR_ID = ps.getProperty("HUMIDITY_SENSOR_ID");
-    if (HUMIDITY_SENSOR_ID != null) {
-        s = new HumiditySensor(adapter, HUMIDITY_SENSOR_ID);
+    ID = ps.getProperty("TEMP1_ID");
+    if (ID != null) {
+        s = new TempSensor(adapter, ID, "temp21");
         sensor_vector.addElement(s);
     }
-    WIND_SPD_ID = ps.getProperty("WIND_SPD_ID"); // = "1900000000F7C61D";
-    if (WIND_SPD_ID != null) {
-        s = new WindSpeedSensor(adapter, WIND_SPD_ID);
+    ID = ps.getProperty("TEMP2_ID");
+    if (ID != null) {
+        s = new TempSensor(adapter, ID, "temp22");
         sensor_vector.addElement(s);
     }
-    WIND_DIR_ID = ps.getProperty("WIND_DIR_ID"); // = "D600000007293320";
-    if (WIND_DIR_ID != null) {
-        s = new WindDirSensor(adapter, WIND_DIR_ID);
+    ID = ps.getProperty("HUMIDITY_SENSOR_ID");
+    if (ID != null) {
+        s = new HumiditySensor(adapter, ID);
         sensor_vector.addElement(s);
     }
-    BARO_SENSOR_ID = ps.getProperty("BARO_SENSOR_ID");
-    if (BARO_SENSOR_ID != null) {
-        s = new BaroSensor(adapter, BARO_SENSOR_ID);
+    ID = ps.getProperty("WIND_SPD_ID"); // = "1900000000F7C61D";
+    if (ID != null) {
+        s = new WindSpeedSensor(adapter, ID);
         sensor_vector.addElement(s);
     }
-    RAIN_COUNTER_ID = ps.getProperty("RAIN_COUNTER_ID");
-    if (RAIN_COUNTER_ID != null) {
-        s = new RainSensor(adapter, RAIN_COUNTER_ID, rain_offset);
+    ID = ps.getProperty("WIND_DIR_ID"); // = "D600000007293320";
+    if (ID != null) {
+        s = new WindDirSensor(adapter, ID);
         sensor_vector.addElement(s);
     }
-    RAIN_OFFSET = ps.getProperty("RAIN_OFFSET");
+    ID = ps.getProperty("BARO_SENSOR_ID");
+    if (ID != null) {
+        s = new BaroSensor(adapter, ID);
+        sensor_vector.addElement(s);
+    }
+    ID = ps.getProperty("RAIN_COUNTER_ID");
+    if (ID != null) {
+        RAIN_OFFSET = ps.getProperty("RAIN_OFFSET");
+        s = new RainSensor(adapter, ID, Float.valueOf(RAIN_OFFSET));
+        sensor_vector.addElement(s);
+    }
     
     NORTH_OFFSET = ps.getProperty("NORTH_OFFSET");
     MEASUREMENT_INTERVAL = ps.getProperty("MEASUREMENT_INTERVAL");
@@ -211,9 +195,7 @@ public class SimpleWeather
     StationID = ps.getProperty("StationID");
     WIND_RADIUS = ps.getProperty("WIND_RADIUS");
     
-    wind_radius = Float.valueOf(WIND_RADIUS);
-    rain_offset = Float.valueOf(RAIN_OFFSET);
-
+//    wind_radius = Float.valueOf(WIND_RADIUS);
     
     measurement = 0;
   }

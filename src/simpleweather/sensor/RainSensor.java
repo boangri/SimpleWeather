@@ -33,7 +33,6 @@ public class RainSensor extends AbstractSensor
   private long currentCount = 0;
   private float rain;
   private float rainRate;
-  private final String name = "rain";
   
   public RainSensor(DSPortAdapter adapter, String deviceID, float rain_offset)
   {

@@ -26,20 +26,14 @@ public class WindSpeedSensor extends AbstractSensor
 {
   // calibration constants
   private static final float radius = Float.parseFloat(SimpleWeather.WIND_RADIUS); // effective radius of the wheel
-  private static final int NORTH_OFFSET = Integer.parseInt(SimpleWeather.NORTH_OFFSET);
   
   // class variables
-  private DSPortAdapter adapter;
   private long lastCount = 0;
   private long lastTicks = 0;
   private OneWireContainer1D   windSpdDevice = null;
-  private OneWireContainer20   windDirDevice = null;
   public float windSpeed = 0f;
-  public int windDir = 16;
   private float sumWind, sumSquares;
-  private int samples;
   private double sumSin, sumCos;
-  private static final boolean debugFlag = SimpleWeather.debugFlag;
  
   public WindSpeedSensor(DSPortAdapter adapter, String windSpdDeviceID)
   {
