@@ -165,13 +165,13 @@ public class SimpleWeather
     }
     ID = ps.getProperty("WIND_SPD_ID"); // = "1900000000F7C61D";
     if (ID != null) {
-        NORTH_OFFSET = ps.getProperty("NORTH_OFFSET");
+        WIND_RADIUS = ps.getProperty("WIND_RADIUS");
         s = new WindSpeedSensor(adapter, ID);
         sensor_vector.addElement(s);
     }
     ID = ps.getProperty("WIND_DIR_ID"); // = "D600000007293320";
     if (ID != null) {
-        WIND_RADIUS = ps.getProperty("WIND_RADIUS");
+        NORTH_OFFSET = ps.getProperty("NORTH_OFFSET");
         s = new WindDirSensor(adapter, ID);
         sensor_vector.addElement(s);
     }
