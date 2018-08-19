@@ -37,7 +37,7 @@ public class SimpleWeather
   public static boolean debugFlag = false;
   public long timestamp;
   public int measurement;
-  public Properties ps;
+  public static Properties ps;
   public Enumeration sensors;
   public Vector sensor_vector = new Vector(10, 1);
   public int secs = 0;
@@ -48,9 +48,8 @@ public class SimpleWeather
   private DSPortAdapter adapter;
   private Wunderground wu;
   
-  public SimpleWeather(Properties ps)
+  public SimpleWeather()
   {
-      this.ps = ps;
       wu = new Wunderground(this);
   }
   
@@ -58,7 +57,7 @@ public class SimpleWeather
   {
     StationProperties sp = new StationProperties("station.properties");
 
-    Properties ps = sp.getStationProperties();
+    ps = sp.getStationProperties();
     
     System.out.println("Starting " + VERSION);
     
@@ -75,7 +74,7 @@ public class SimpleWeather
     {
       // get instances to the primary object
       
-      SimpleWeather sw   = new SimpleWeather(ps);
+      SimpleWeather sw   = new SimpleWeather();
       // call the main program loop
       sw.init();
       sw.mainLoop();
@@ -97,7 +96,7 @@ public class SimpleWeather
     Enumeration pse = ps.keys();
     while (pse.hasMoreElements()) {
       String str = (String) pse.nextElement();
-      System.out.println(str+"="+ps.getProperty(str));
+      System.out.println(str+"="+SimpleWeather.ps.getProperty(str));
     }
     ISensor s;
     String ID;

@@ -32,7 +32,7 @@ public class WindSpeedSensor extends AbstractSensor
   private long lastTicks = 0;
   private OneWireContainer1D   windSpdDevice = null;
   public float windSpeed = 0f;
-  private float sumWind, sumSquares;
+  private float sumWind;
   private double sumSin, sumCos;
  
   public WindSpeedSensor(DSPortAdapter adapter, String windSpdDeviceID)
