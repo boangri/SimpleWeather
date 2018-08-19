@@ -138,7 +138,7 @@ public class WindSpeedSensor extends AbstractSensor
   {
     try {
         float data = this.getWindSpeed();
-        System.out.println("Temperature = " + data + " degs");
+        System.out.println("Wind speed = " + data + " M/sec");
         updateAverage(data);
     } catch (OneWireException e) {
         System.out.println("Error Reading Wind Speed: " + e);

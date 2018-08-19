@@ -219,7 +219,7 @@ public class WindDirSensor extends AbstractSensor
   {
     try {
         float data = this.getWindDirection();
-        System.out.println("Temperature = " + data + " degs");
+        System.out.println("Wind direction = " + data + " rumbs");
         updateAverage(data);
     } catch (OneWireException e) {
         System.out.println("Error Reading Wind Direction: " + e);
