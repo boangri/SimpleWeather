@@ -166,11 +166,13 @@ public class SimpleWeather
     }
     ID = ps.getProperty("WIND_SPD_ID"); // = "1900000000F7C61D";
     if (ID != null) {
+        NORTH_OFFSET = ps.getProperty("NORTH_OFFSET");
         s = new WindSpeedSensor(adapter, ID);
         sensor_vector.addElement(s);
     }
     ID = ps.getProperty("WIND_DIR_ID"); // = "D600000007293320";
     if (ID != null) {
+        WIND_RADIUS = ps.getProperty("WIND_RADIUS");
         s = new WindDirSensor(adapter, ID);
         sensor_vector.addElement(s);
     }
@@ -185,15 +187,13 @@ public class SimpleWeather
         s = new RainSensor(adapter, ID, Float.valueOf(RAIN_OFFSET));
         sensor_vector.addElement(s);
     }
-    
-    NORTH_OFFSET = ps.getProperty("NORTH_OFFSET");
+   
     MEASUREMENT_INTERVAL = ps.getProperty("MEASUREMENT_INTERVAL");
-    
     WWW = ps.getProperty("WWW");
     URL = ps.getProperty("URL");
     
     StationID = ps.getProperty("StationID");
-    WIND_RADIUS = ps.getProperty("WIND_RADIUS");
+    
     
 //    wind_radius = Float.valueOf(WIND_RADIUS);
     

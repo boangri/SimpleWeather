@@ -25,7 +25,7 @@ import simpleweather.SimpleWeatherException;
 public class WindSpeedSensor extends AbstractSensor
 {
   // calibration constants
-  private static final float radius = Float.parseFloat(SimpleWeather.WIND_RADIUS); // effective radius of the wheel
+  private final float radius = Float.parseFloat(SimpleWeather.WIND_RADIUS); // effective radius of the wheel
   
   // class variables
   private long lastCount = 0;

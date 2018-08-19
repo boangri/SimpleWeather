@@ -24,7 +24,7 @@ import simpleweather.SimpleWeather;
 public class WindDirSensor extends AbstractSensor
 {
   // calibration constants
-  private static final int NORTH_OFFSET = Integer.parseInt(SimpleWeather.NORTH_OFFSET);
+  private final int NORTH_OFFSET = Integer.parseInt(SimpleWeather.NORTH_OFFSET);
   
   private long lastCount = 0;
   private long lastTicks = 0;
