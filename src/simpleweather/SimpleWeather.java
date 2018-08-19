@@ -51,6 +51,7 @@ public class SimpleWeather
   public SimpleWeather(Properties ps)
   {
       this.ps = ps;
+      wu = new Wunderground(this);
   }
   
   public static void main(String[] args) throws Exception
@@ -75,7 +76,6 @@ public class SimpleWeather
       // get instances to the primary object
       
       SimpleWeather sw   = new SimpleWeather(ps);
-      Wunderground wu = new Wunderground(sw);
       // call the main program loop
       sw.init();
       sw.mainLoop();
