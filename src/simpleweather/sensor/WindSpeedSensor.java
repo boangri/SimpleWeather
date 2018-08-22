@@ -12,7 +12,6 @@
 
 package simpleweather.sensor;
 
-
 import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
 import com.dalsemi.onewire.container.*;
@@ -20,26 +19,25 @@ import java.util.Properties;
 import simpleweather.SimpleWeather;
 import simpleweather.SimpleWeatherException;
 
-
-
 public class WindSpeedSensor extends AbstractSensor
 {
   // calibration constants
-  private final float radius = Float.parseFloat(SimpleWeather.WIND_RADIUS); // effective radius of the wheel
-  
+  private float radius = 0.5f;//  effective radius of the wheel
+  private final String WIND_RADIUS;
   // class variables
   private long lastCount = 0;
   private long lastTicks = 0;
   private OneWireContainer1D   windSpdDevice = null;
-  public float windSpeed = 0f;
+  private float windSpeed = 0f;
   private float sumWind;
   private double sumSin, sumCos;
  
-  public WindSpeedSensor(DSPortAdapter adapter, String windSpdDeviceID)
+  public WindSpeedSensor(DSPortAdapter adapter, String windSpdDeviceID, Properties ps)
   {
     // get instances of the 1-wire devices
     windSpdDevice   = new OneWireContainer1D(adapter, windSpdDeviceID);
-    
+    WIND_RADIUS = ps.getProperty("WIND_RADIUS");
+    if (WIND_RADIUS != null) radius = Float.valueOf(WIND_RADIUS);
     if (windSpdDevice != null)
     {
       lastTicks = System.currentTimeMillis();

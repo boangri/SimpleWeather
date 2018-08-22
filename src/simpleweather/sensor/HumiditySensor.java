@@ -42,7 +42,7 @@ public class HumiditySensor extends AbstractSensor
   private final int VDD_SENSE_AD = 0;
   private final int CURRENT_SENSE_AD = 2;
 
-  public HumiditySensor(DSPortAdapter adapter, String deviceID)
+  public HumiditySensor(DSPortAdapter adapter, String deviceID, Properties ps)
   {
     // get an instance of the 1-wire device
     humidityDevice = new OneWireContainer26(adapter, deviceID);

@@ -20,20 +20,11 @@ import com.dalsemi.onewire.adapter.*;
 
 public class SimpleWeather
 {
-  public static final String VERSION = "SimpleWeather 2.1.3 16.08.2018";
-  //public static String ONE_WIRE_SERIAL_PORT; 
-  
-  // 1-Wire Devices
-  
-  private static String RAIN_OFFSET;
+  public static final String VERSION = "SimpleWeather 2.1.4 22.08.2018";
   private static String MEASUREMENT_INTERVAL; //  Interval between measurements in seconds. Must divide 60.
   public static String WWW = "www.xland.ru";
   public static String URL = "/cgi-bin/meteo_upd";
   public static String StationID = "main";
-  public static String WIND_RADIUS;
-  public static String NORTH_OFFSET;
-  //public static String ADAPTER_TYPE ;
-  
   public static boolean debugFlag = false;
   public long timestamp;
   public int measurement;
@@ -43,8 +34,7 @@ public class SimpleWeather
   public int secs = 0;
   public int humidityErrorCnt = 0;
   public int pressureErrorCnt = 0;
-  public int solarErrorCnt = 0;
-  
+  public int solarErrorCnt = 0; 
   private DSPortAdapter adapter;
   private final Wunderground wu;
   
@@ -160,30 +150,27 @@ public class SimpleWeather
     }
     ID = ps.getProperty("HUMIDITY_SENSOR_ID");
     if (ID != null) {
-        s = new HumiditySensor(adapter, ID);
+        s = new HumiditySensor(adapter, ID, ps);
         sensor_vector.addElement(s);
     }
     ID = ps.getProperty("WIND_SPD_ID"); // = "1900000000F7C61D";
     if (ID != null) {
-        WIND_RADIUS = ps.getProperty("WIND_RADIUS");
-        s = new WindSpeedSensor(adapter, ID);
+        s = new WindSpeedSensor(adapter, ID, ps);
         sensor_vector.addElement(s);
     }
     ID = ps.getProperty("WIND_DIR_ID"); // = "D600000007293320";
     if (ID != null) {
-        NORTH_OFFSET = ps.getProperty("NORTH_OFFSET");
-        s = new WindDirSensor(adapter, ID);
+        s = new WindDirSensor(adapter, ID, ps);
         sensor_vector.addElement(s);
     }
     ID = ps.getProperty("BARO_SENSOR_ID");
     if (ID != null) {
-        s = new BaroSensor(adapter, ID);
+        s = new BaroSensor(adapter, ID, ps);
         sensor_vector.addElement(s);
     }
     ID = ps.getProperty("RAIN_COUNTER_ID");
     if (ID != null) {
-        RAIN_OFFSET = ps.getProperty("RAIN_OFFSET");
-        s = new RainSensor(adapter, ID, Float.valueOf(RAIN_OFFSET));
+        s = new RainSensor(adapter, ID, ps);
         sensor_vector.addElement(s);
     }
    
@@ -192,9 +179,6 @@ public class SimpleWeather
     URL = ps.getProperty("URL");
     
     StationID = ps.getProperty("StationID");
-    
-    
-//    wind_radius = Float.valueOf(WIND_RADIUS);
     
     measurement = 0;
   }
@@ -243,8 +227,6 @@ public class SimpleWeather
             s.update();
         } 
         
-        
-	
         // update the time
         lastMinute = minute;
         
@@ -285,22 +267,21 @@ public class SimpleWeather
     }
   }
   
-  private void resetBus() // reset the 1-wire bus
-  {
-    System.out.println("Resetting 1-wire bus");
-    
-    try
+    private void resetBus() // reset the 1-wire bus
     {
-      int result = adapter.reset();
-      
-      if (result == 0)
-        System.out.println("Warning: Reset indicates no Device Present");
-      if (result == 3)
-        System.out.println("Warning: Reset indicates 1-Wire bus is shorted");
+        System.out.println("Resetting 1-wire bus");
+
+        try {
+            int result = adapter.reset();
+
+            if (result == 0) {
+                System.out.println("Warning: Reset indicates no Device Present");
+            }
+            if (result == 3) {
+                System.out.println("Warning: Reset indicates 1-Wire bus is shorted");
+            }
+        } catch (OneWireException e) {
+            System.out.println("Exception Resetting the bus: " + e);
+        }
     }
-    catch (OneWireException e)
-    {
-      System.out.println("Exception Resetting the bus: " + e);
-    }
-  }
 }

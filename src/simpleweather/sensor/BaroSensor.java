@@ -33,7 +33,7 @@ public class BaroSensor extends AbstractSensor
   private OneWireContainer26 baroDevice = null;
   //private static boolean debugFlag = SimpleWeather.debugFlag;
   
-  public BaroSensor(DSPortAdapter adapter, String deviceID)
+  public BaroSensor(DSPortAdapter adapter, String deviceID, Properties ps)
   {
     // get instances of the 1-wire devices
     baroDevice = new OneWireContainer26(adapter, deviceID);

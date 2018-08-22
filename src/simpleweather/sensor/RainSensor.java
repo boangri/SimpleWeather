@@ -3,7 +3,6 @@
  Project Name: SimpleWeather
  File name:    RainSensor.java
  Version:      1.0.4 02/07/06
- $Id: RainSensor.java,v 1.1.1.1 2010/02/19 15:34:24 boris Exp $
  
  Copyright (C) 2006 by T. Bitson - All rights reserved.
  
@@ -13,40 +12,37 @@
 
 package simpleweather.sensor;
 
-
 import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
 import com.dalsemi.onewire.container.*;
 import java.util.Properties;
 import simpleweather.SimpleWeatherException;
 
-
-
 public class RainSensor extends AbstractSensor
 {
-  
-  // class variables
   private OneWireContainer1D rainDevice = null;
-  private float RAIN_OFFSET;
-  private float RAIN_GAIN = 0.01f;
+  private long rain_offset = 0;
+  private final String RAIN_OFFSET;
+  private float rain_gain = 0.01f;
+  private final String RAIN_GAIN;
   private long lastCount = 0;
   private long currentCount = 0;
   private float rain;
   private float rainRate;
   
-  public RainSensor(DSPortAdapter adapter, String deviceID, float rain_offset)
+  public RainSensor(DSPortAdapter adapter, String deviceID, Properties ps)
   {
     // get instances of the 1-wire devices
     rainDevice = new OneWireContainer1D(adapter, deviceID);
-    RAIN_OFFSET = rain_offset;
+    RAIN_OFFSET = ps.getProperty("RAIN_OFFSET");
+    if (RAIN_OFFSET != null) rain_offset = Long.valueOf(RAIN_OFFSET);
+    RAIN_GAIN = ps.getProperty("RAIN_GAIN");
+    if (RAIN_GAIN != null) rain_gain = Float.valueOf(RAIN_GAIN);
     this.resetAverage();
-    
   }
   
   public float getRainCount() throws SimpleWeatherException
   {
-    
-    
     try
     {
       if (debugFlag)
@@ -55,12 +51,10 @@ public class RainSensor extends AbstractSensor
         System.out.print("  ID = " + rainDevice.getAddressAsString() + "\n");
       }
       
+      currentCount = rainDevice.readCounter(15) - rain_offset;
       
-      // read rain count from counter 15 and subtract offset
-      currentCount = rainDevice.readCounter(15) - (long)RAIN_OFFSET;
-      
-      rain = (float)currentCount * RAIN_GAIN;
-      rainRate = rain - (float)lastCount * RAIN_GAIN;
+      rain = (float)currentCount * rain_gain;
+      rainRate = rain - (float)lastCount * rain_gain;
       
       if (debugFlag)
         System.out.println("Rain Count: " + currentCount);
@@ -68,8 +62,6 @@ public class RainSensor extends AbstractSensor
     catch (OneWireException e)
     {
         throw new SimpleWeatherException("" + e);
-//      System.out.println("Error Reading Rain Counter: " + e);
-//      rain = -9999;
     }
     return rain;
   }

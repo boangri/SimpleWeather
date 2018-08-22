@@ -24,18 +24,20 @@ import simpleweather.SimpleWeather;
 public class WindDirSensor extends AbstractSensor
 {
   // calibration constants
-  private final int NORTH_OFFSET = Integer.parseInt(SimpleWeather.NORTH_OFFSET);
-  
+  private int north_offset = 12; //Integer.parseInt(SimpleWeather.NORTH_OFFSET);
+  private final String NORTH_OFFSET;
   private long lastCount = 0;
   private long lastTicks = 0;
   private OneWireContainer20   windDirDevice = null;
   public int windDir = 16;
   private double sumSin, sumCos;
  
-  public WindDirSensor(DSPortAdapter adapter, String windDirDeviceID)
+  public WindDirSensor(DSPortAdapter adapter, String windDirDeviceID, Properties ps)
   {
     // get instances of the 1-wire devices
     windDirDevice   = new OneWireContainer20(adapter, windDirDeviceID);
+    NORTH_OFFSET = ps.getProperty("NORTH_OFFSET");
+    if (NORTH_OFFSET != null) north_offset = Integer.valueOf(NORTH_OFFSET);
     this.resetAverage();
   }
  
@@ -90,12 +92,12 @@ public class WindDirSensor extends AbstractSensor
         System.out.println("Wind Dir AtoD Ch B = " + chBVolts);
         System.out.println("Wind Dir AtoD Ch C = " + chCVolts);
         System.out.println("Wind Dir AtoD Ch D = " + chDVolts);
-        System.out.println("Wind Direction     = " + windDir + "\n");
+        System.out.println("Wind Direction     = " + windDir);
       }
 
     
 	if (windDir < 16) 
-		windDir = (windDir + NORTH_OFFSET) % 16;
+		windDir = (windDir + north_offset) % 16;
 	
     return windDir;
   }
