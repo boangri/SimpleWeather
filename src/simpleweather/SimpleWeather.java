@@ -21,7 +21,7 @@ import com.dalsemi.onewire.adapter.*;
 public class SimpleWeather
 {
   public static final String VERSION = "SimpleWeather 2.1.3 16.08.2018";
-  public static String ONE_WIRE_SERIAL_PORT; 
+  //public static String ONE_WIRE_SERIAL_PORT; 
   
   // 1-Wire Devices
   
@@ -32,7 +32,7 @@ public class SimpleWeather
   public static String StationID = "main";
   public static String WIND_RADIUS;
   public static String NORTH_OFFSET;
-  public static String ADAPTER_TYPE ;
+  //public static String ADAPTER_TYPE ;
   
   public static boolean debugFlag = false;
   public long timestamp;
@@ -46,7 +46,7 @@ public class SimpleWeather
   public int solarErrorCnt = 0;
   
   private DSPortAdapter adapter;
-  private Wunderground wu;
+  private final Wunderground wu;
   
   public SimpleWeather()
   {
@@ -92,6 +92,8 @@ public class SimpleWeather
   
   private void init()
   {
+    String ADAPTER_TYPE = ps.getProperty("ADAPTER_TYPE");
+    String ONE_WIRE_SERIAL_PORT = ps.getProperty("ONE_WIRE_SERIAL_PORT"); 
       
     Enumeration pse = ps.keys();
     while (pse.hasMoreElements()) {
@@ -101,8 +103,6 @@ public class SimpleWeather
     ISensor s;
     String ID;
     
-    ADAPTER_TYPE = ps.getProperty("ADAPTER_TYPE");
-    ONE_WIRE_SERIAL_PORT = ps.getProperty("ONE_WIRE_SERIAL_PORT");
     // get the 1-wire adapter
     try
     {
