@@ -20,7 +20,7 @@ import com.dalsemi.onewire.adapter.*;
 
 public class SimpleWeather
 {
-  public static final String VERSION = "SimpleWeather 2.1.4 22.08.2018";
+  public static final String VERSION = "SimpleWeather 2.1.5 25.08.2018";
   private static String MEASUREMENT_INTERVAL; //  Interval between measurements in seconds. Must divide 60.
   public static String WWW = "www.xland.ru";
   public static String URL = "/cgi-bin/meteo_upd";
