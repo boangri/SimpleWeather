@@ -28,9 +28,6 @@ public class WindSpeedSensor extends AbstractSensor
   private long lastCount = 0;
   private long lastTicks = 0;
   private OneWireContainer1D   windSpdDevice = null;
-  private float windSpeed = 0f;
-  private float sumWind;
-  private double sumSin, sumCos;
  
   public WindSpeedSensor(DSPortAdapter adapter, String windSpdDeviceID, Properties ps)
   {
@@ -56,7 +53,7 @@ public class WindSpeedSensor extends AbstractSensor
  
   public float getWindSpeed() throws OneWireException
   {
-    //float windSpeed = 0f;
+    float windSpeed = 0f;
     
     
       if (debugFlag)
@@ -89,47 +86,22 @@ public class WindSpeedSensor extends AbstractSensor
     return windSpeed;
   }
   
-  public void updateAverage()
-  { 
-    samples++;
-    
-    if (debugFlag)
-      System.out.println("Sample #" + samples);
-    
-    // update sumWind speed
-    sumWind += windSpeed;
-    sumSquares += windSpeed*windSpeed;
-  }
-  
   public String getWind()
   {
     if (samples == 0) return ("U");
-    
     double avgWind = Math.sqrt(sumSquares/samples);
     
     return this.formatValue((float)avgWind, 1);
   } 
   
-  public String getWindSigma()
-  {
-    if (samples == 0) return ("U");
-    
-    float avg = sumWind/samples;
-    float disp = sumSquares/samples;
-    double sigma = Math.sqrt(disp - avg*avg);
-    
-    return this.formatValue((float)sigma, 1);
-  } 
-  
   public String getWindPk()
   {
     if (samples == 0) return ("U");
-    
-    float avg = sumWind/samples;
+    float avg = sumValues/samples;
     float disp = sumSquares/samples;
-    float sigma = (float)Math.sqrt(disp - avg*avg);
+    double pk = Math.sqrt(disp) + Math.sqrt(disp - avg*avg);
     
-    return this.formatValue(avg + sigma, 1);
+    return this.formatValue((float)pk, 1);
   } 
   
   public void update()
@@ -145,8 +117,6 @@ public class WindSpeedSensor extends AbstractSensor
   
   public Properties getResults()
   {
-//            sendUrl.append("&wspd=" + sw.wss1.getWind());
-//            sendUrl.append("&wspdpk=" + sw.wss1.getWindSigma());
       Properties p = new Properties();
       p.setProperty("wspd", getWind());
       p.setProperty("wspdpk", getWindPk());
