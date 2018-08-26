@@ -25,8 +25,8 @@ public class RainSensor extends AbstractSensor {
     private final String RAIN_OFFSET;
     private float rain_gain = 0.0114f; // inches/
     private final String RAIN_GAIN;
-    private long lastCount = 0;
-    private long currentCount = 0;
+    private long lastCount;
+    private long currentCount;
     private float rain;
     private float rainRate;
 
@@ -41,7 +41,11 @@ public class RainSensor extends AbstractSensor {
         if (RAIN_GAIN != null) {
             rain_gain = Float.valueOf(RAIN_GAIN);
         }
-        this.resetAverage();
+        try {
+            lastCount = rainDevice.readCounter(15) - rain_offset;
+        } catch (OneWireException e) {
+            System.out.println("Rain Count: can not read");
+        }
     }
 
     public float getRainCount() throws SimpleWeatherException {
