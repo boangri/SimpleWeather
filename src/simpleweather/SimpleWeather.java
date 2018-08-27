@@ -19,7 +19,7 @@ import com.dalsemi.onewire.adapter.*;
 
 public class SimpleWeather {
 
-    public static final String VERSION = "SimpleWeather 2.1.10 27.08.2018";
+    public static final String VERSION = "SimpleWeather 2.1.11 27.08.2018";
     private static String MEASUREMENT_INTERVAL; //  Interval between measurements in seconds. Must divide 60.
     public static String WWW = "www.xland.ru";
     public static String URL = "/cgi-bin/meteo_upd";
@@ -178,9 +178,10 @@ public class SimpleWeather {
 
     public void mainLoop() throws NumberFormatException {
         Date date = new Date();
+        Calendar now = Calendar.getInstance();
         int second;
         int minute, lastMinute = -99;
-        int hour;
+        //int hour;
         int interval = Integer.parseInt(MEASUREMENT_INTERVAL);
         boolean quit = false;
         InputStreamReader in = new InputStreamReader(System.in);
@@ -195,12 +196,9 @@ public class SimpleWeather {
 
             // check current time
             timestamp = System.currentTimeMillis() / 1000;
-            date.setTime(System.currentTimeMillis());
-            second = date.getSeconds();
-            minute = date.getMinutes();
-            hour = date.getHours();
-
-      // only loop once a minute
+            second = now.get(Calendar.SECOND); 
+            minute = now.get(Calendar.MINUTE); 
+            
             //if (minute != lastMinute)
             if ((second % interval) == 0) {
                 System.out.println("");
