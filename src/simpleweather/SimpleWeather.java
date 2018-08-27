@@ -19,17 +19,17 @@ import com.dalsemi.onewire.adapter.*;
 
 public class SimpleWeather {
 
-    public static final String VERSION = "SimpleWeather 2.1.8 26.08.2018";
+    public static final String VERSION = "SimpleWeather 2.1.9 27.08.2018";
     private static String MEASUREMENT_INTERVAL; //  Interval between measurements in seconds. Must divide 60.
     public static String WWW = "www.xland.ru";
     public static String URL = "/cgi-bin/meteo_upd";
     public static String StationID = "main";
     public static boolean debugFlag = false;
-    public long timestamp;
-    public int measurement;
+    public static long timestamp;
+    public static int measurement;
     public static Properties ps;
     public Enumeration sensors;
-    public Vector sensor_vector = new Vector(10, 1);
+    public static Vector sensor_vector = new Vector(10, 1);
     public int secs = 0;
     public int humidityErrorCnt = 0;
     public int pressureErrorCnt = 0;
@@ -38,7 +38,7 @@ public class SimpleWeather {
     private final Wunderground wu;
 
     public SimpleWeather() {
-        wu = new Wunderground(this);
+        wu = new Wunderground();
     }
 
     public static void main(String[] args) throws Exception {

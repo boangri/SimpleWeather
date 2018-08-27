@@ -31,11 +31,11 @@ public class Wunderground implements Runnable {
     private final Thread t;
     public int hits;
     public int failures;
-    private final SimpleWeather sw;
+    //private final SimpleWeather sw;
     private Enumeration sensors;
     
-    Wunderground(SimpleWeather sw) {
-        this.sw = sw;
+    Wunderground() {
+//        this.sw = sw;
         hits = failures = 0;
         t = new Thread(this, "Fifo processing");
         t.start();
@@ -48,18 +48,19 @@ public class Wunderground implements Runnable {
     public void send() {
         //String url = "weatherstation.wunderground.com";
         StringBuffer sendUrl = new StringBuffer();
-        url = sw.WWW;
+        //url = sw.WWW;
+        url = SimpleWeather.WWW;
 
         // build up wunderground message based on what sensors we have.
         // comment out the lines if you don't have that sensor
 
 
-        sendUrl.append("GET " + sw.URL + "?");
-        sendUrl.append("ID=" + sw.StationID);
-        sendUrl.append("&ts=" + sw.timestamp);
-        sendUrl.append("&mn=" + sw.measurement);
+        sendUrl.append("GET " + SimpleWeather.URL + "?");
+        sendUrl.append("ID=" + SimpleWeather.StationID);
+        sendUrl.append("&ts=" + SimpleWeather.timestamp);
+        sendUrl.append("&mn=" + SimpleWeather.measurement);
 
-        sensors = sw.sensor_vector.elements();
+        sensors = SimpleWeather.sensor_vector.elements();
         
         while(sensors.hasMoreElements()) {
             ISensor s = (ISensor) sensors.nextElement();
