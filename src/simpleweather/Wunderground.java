@@ -3,7 +3,6 @@
 Project Name: SimpleWeather
 File name:    Wunderground.java
 Version:      1.0.9 06/23/06
-$Id: Wunderground.java,v 1.5 2010/02/25 16:33:07 boris Exp $
 
 Copyright (C) 2006 by T. Bitson - All rights reserved.
 
@@ -20,9 +19,6 @@ import java.util.Enumeration;
 import simpleweather.sensor.ISensor;
 
 public class Wunderground implements Runnable {
-    // user constants
-
-    // class variables
     private BufferedReader in;
     private PrintStream out;
     private final static boolean debugFlag = true; //SimpleWeather.debugFlag;
@@ -31,11 +27,9 @@ public class Wunderground implements Runnable {
     private final Thread t;
     public int hits;
     public int failures;
-    //private final SimpleWeather sw;
     private Enumeration sensors;
     
     Wunderground() {
-//        this.sw = sw;
         hits = failures = 0;
         t = new Thread(this, "Fifo processing");
         t.start();
@@ -46,14 +40,8 @@ public class Wunderground implements Runnable {
     }
     
     public void send() {
-        //String url = "weatherstation.wunderground.com";
         StringBuffer sendUrl = new StringBuffer();
-        //url = sw.WWW;
         url = SimpleWeather.WWW;
-
-        // build up wunderground message based on what sensors we have.
-        // comment out the lines if you don't have that sensor
-
 
         sendUrl.append("GET " + SimpleWeather.URL + "?");
         sendUrl.append("ID=" + SimpleWeather.StationID);
@@ -74,52 +62,7 @@ public class Wunderground implements Runnable {
             }
             
         } 
-//        // Temperature
-//        //sendUrl.append("&tempf=" + wc.getTemp());
-//        if (sw.ts1ex) {
-//            sendUrl.append("&temp1=" + sw.ts1.getTemp());
-//        }
-//        if (sw.ts2ex) {
-//            sendUrl.append("&temp2=" + sw.ts2.getTemp());
-//        }
-//        // temp DS18B20
-//        if (sw.ts21ex) {
-//            sendUrl.append("&temp21=" + sw.ts21.getTemp());
-//        }
-//        if (sw.ts22ex) {
-//            sendUrl.append("&temp22=" + sw.ts22.getTemp());
-//        }
-//        // Humidity
-//        if (sw.hs1ex) {
-//            sendUrl.append("&humidity=" + sw.hs1.getHum());
-//            // Dewpoint
-//            //sendUrl.append("&dewptf=" + wc.getDP());
-//            // Solar radiation level, percent
-//            //sendUrl.append("&solar=" + wc.getSolar());
-//        }
-//
-//        // Wind Speed and Direction
-//        if (sw.ws1ex) {
-//            sendUrl.append("&wspd=" + sw.wss1.getWind());
-//            sendUrl.append("&wspdpk=" + sw.wss1.getWindSigma());
-//            sendUrl.append("&wdir=" + sw.wds1.getWindDirAvg());
-//        }
-//
-//        // Baro Pressure
-//        if (sw.bs1ex) {
-//            sendUrl.append("&baromin=" + sw.bs1.getBaro());
-//        }
-//
-//        // Rain
-//        if (sw.rs1ex) {
-//            sendUrl.append("&rainin=" + sw.rs1.getRainRate());
-//            //sendUrl.append("&dailyrainin=" + wc.getRain24());
-//            sendUrl.append("&raincnt=" + sw.rs1.getRain());
-//            //sendUrl.append("&pulse=" + sw.pulse);
-//        }
 
-        // Software Type & action
-        //sendUrl.append("&softwaretype=tws&action=updateraw HTTP//1.1\r\nConnection: keep-alive\r\n\r\n");
         sendUrl.append(" HTTP/1.0\r\n\r\n");
         push(sendUrl.toString());
     }
@@ -128,6 +71,7 @@ public class Wunderground implements Runnable {
         fifo.push(surl);
     }
 
+    @Override
     public void run() {
         String str;
         Boolean success = false;
