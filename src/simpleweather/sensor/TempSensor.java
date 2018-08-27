@@ -98,6 +98,7 @@ public class TempSensor extends AbstractSensor {
         return getAverage(1);
     }
 
+    @Override
     public void update() {
         try {
             float temp = this.getTemperature();
@@ -107,7 +108,8 @@ public class TempSensor extends AbstractSensor {
             System.out.println("Error Reading Temperature: " + e);
         }
     }
-
+    
+    @Override
     public Properties getResults() {
         Properties p = new Properties();
         p.setProperty(name, getAverage(1));

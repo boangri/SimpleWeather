@@ -1,14 +1,15 @@
-/******************************************************************************
-
-Project Name: SimpleWeather
-File name:    Wunderground.java
-Version:      1.0.9 06/23/06
-
-Copyright (C) 2006 by T. Bitson - All rights reserved.
-
-This class provides the interface to the Weather Underground.
-
- *****************************************************************************/
+/**
+ * ****************************************************************************
+ *
+ * Project Name: SimpleWeather File name: Wunderground.java Version: 1.0.9
+ * 06/23/06
+ *
+ * Copyright (C) 2006 by T. Bitson - All rights reserved.
+ *
+ * This class provides the interface to the Weather Underground.
+ *
+ ****************************************************************************
+ */
 package simpleweather;
 
 import java.net.*;
@@ -19,18 +20,20 @@ import java.util.Enumeration;
 import simpleweather.sensor.ISensor;
 
 public class Wunderground implements Runnable {
+
     private BufferedReader in;
     private PrintStream out;
     private final static boolean debugFlag = true; //SimpleWeather.debugFlag;
-    private MyFifo fifo = new MyFifo();
+    private final MyFifo fifo;
     private String url;
     private final Thread t;
     public int hits;
     public int failures;
-    private Enumeration sensors;
-    
+    private Enumeration<ISensor> sensors;
+
     Wunderground() {
         hits = failures = 0;
+        fifo = new MyFifo();
         t = new Thread(this, "Fifo processing");
         t.start();
     }
@@ -38,30 +41,30 @@ public class Wunderground implements Runnable {
     public int getCount() {
         return fifo.getCount();
     }
-    
+
     public void send() {
-        StringBuffer sendUrl = new StringBuffer();
+        StringBuilder sendUrl = new StringBuilder();
         url = SimpleWeather.WWW;
 
-        sendUrl.append("GET " + SimpleWeather.URL + "?");
-        sendUrl.append("ID=" + SimpleWeather.StationID);
-        sendUrl.append("&ts=" + SimpleWeather.timestamp);
-        sendUrl.append("&mn=" + SimpleWeather.measurement);
+        sendUrl.append("GET ").append(SimpleWeather.URL).append("?");
+        sendUrl.append("ID=").append(SimpleWeather.StationID);
+        sendUrl.append("&ts=").append(SimpleWeather.timestamp);
+        sendUrl.append("&mn=").append(SimpleWeather.measurement);
 
         sensors = SimpleWeather.sensor_vector.elements();
-        
-        while(sensors.hasMoreElements()) {
-            ISensor s = (ISensor) sensors.nextElement();
+
+        while (sensors.hasMoreElements()) {
+            ISensor s = sensors.nextElement();
             Properties res = s.getResults();
-            Enumeration er;
+            Enumeration<Object> er;
             er = res.keys();
             while (er.hasMoreElements()) {
-                String key = (String)er.nextElement();
+                String key = (String) er.nextElement();
                 String value = res.getProperty(key);
-                sendUrl.append("&"+key+"="+value);
+                sendUrl.append("&").append(key).append("=").append(value);
             }
-            
-        } 
+
+        }
 
         sendUrl.append(" HTTP/1.0\r\n\r\n");
         push(sendUrl.toString());

@@ -10,40 +10,14 @@
 
 package simpleweather;
 
-// imports
-import java.lang.Exception;
-
-
-/**
- * This is the general exception thrown by the iButton and 1-Wire
- * operations.
- *
- * @version    0.00, 21 August 2000
- * @author     DS
- */
 public class SimpleWeatherException
-   extends Exception
-{
+        extends Exception {
 
-   //--------
-   //-------- Contructor
-   //--------
+    public SimpleWeatherException() {
+        super();
+    }
 
-   /**
-    * Constructs a <code>OneWireException</code> with no detail message.
-    */
-   public SimpleWeatherException ()
-   {
-      super();
-   }
-
-   /**
-    * Constructs a <code>OneWireException</code> with the specified detail message.
-    *
-    * @param  desc   the detail message description
-    */
-   public SimpleWeatherException (String desc)
-   {
-      super(desc);
-   }
+    public SimpleWeatherException(String desc) {
+        super(desc);
+    }
 }

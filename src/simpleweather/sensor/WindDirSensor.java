@@ -16,7 +16,6 @@ import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
 import com.dalsemi.onewire.container.*;
 import java.util.Properties;
-import simpleweather.SimpleWeather;
 
 public class WindDirSensor extends AbstractSensor {
     private int north_offset = 12; 
@@ -37,7 +36,7 @@ public class WindDirSensor extends AbstractSensor {
     }
 
     public int getWindDirection() throws OneWireException {
-        int windDir = 16;
+        int windDir;
         if (debugFlag) {
             System.out.print("Wind Dir: Device = " + windDirDevice.getName());
             System.out.println("  ID = " + windDirDevice.getAddressAsString());
@@ -153,6 +152,7 @@ public class WindDirSensor extends AbstractSensor {
         return direction[input];
     }
 
+    @Override
     public void resetAverage() {
         samples = 0;
         sumSin = 0;
@@ -207,6 +207,7 @@ public class WindDirSensor extends AbstractSensor {
         return this.formatValue(angle, 1);
     }
 
+    @Override
     public void update() {
         try {
             int windDir = this.getWindDirection();
@@ -217,6 +218,7 @@ public class WindDirSensor extends AbstractSensor {
         }
     }
 
+    @Override
     public Properties getResults() {
         Properties p = new Properties();
         p.setProperty("wdir", getWindDirAvg());

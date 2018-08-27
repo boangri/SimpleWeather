@@ -1,19 +1,16 @@
-/******************************************************************************
- 
- Project Name: SimpleWeather
- File name:    HumiditySensor.java
- Version:      1.1.2 06/17/06
- $Id: HumiditySensor.java,v 1.1.1.1 2010/02/19 15:34:24 boris Exp $
- 
- Copyright (C) 2005 by T. Bitson - All rights reserved.
- 
- This class provides the interface to the 1-wire humidity sensor
- device.
- 
- *****************************************************************************/
-
+/**
+ * ****************************************************************************
+ *
+ * Project Name: SimpleWeather File name: HumiditySensor.java Version: 1.1.2
+ * 06/17/06 $Id: HumiditySensor.java,v 1.1.1.1 2010/02/19 15:34:24 boris Exp $
+ *
+ * Copyright (C) 2005 by T. Bitson - All rights reserved.
+ *
+ * This class provides the interface to the 1-wire humidity sensor device.
+ *
+ ****************************************************************************
+ */
 package simpleweather.sensor;
-
 
 import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
@@ -21,93 +18,85 @@ import com.dalsemi.onewire.container.*;
 import java.util.Properties;
 import simpleweather.SimpleWeatherException;
 
+public class HumiditySensor extends AbstractSensor {
 
+    // calibration constants
 
-public class HumiditySensor extends AbstractSensor
-{
-  // calibration constants
-  private final float HUMIDITY_OFFSET = 0.0f;
-  //private final float HUMIDITY_GAIN   = 0.927f;
-  private final float HUMIDITY_GAIN   = 0.887f;
-  private final float SOLAR_OFFSET = 0.0f;
-  private final float SOLAR_GAIN   = 0.967f;
-  
+    private final float HUMIDITY_OFFSET = 0.0f;
+    //private final float HUMIDITY_GAIN   = 0.927f;
+    private final float HUMIDITY_GAIN = 0.887f;
+    private final float SOLAR_OFFSET = 0.0f;
+    private final float SOLAR_GAIN = 0.967f;
+
   // class variables
-  //private DSPortAdapter adapter;
-  private OneWireContainer26 humidityDevice = null;
+    //private DSPortAdapter adapter;
+    private OneWireContainer26 humidityDevice = null;
   //private OneWireContainer26 solarDevice = null;
-  //private static boolean debugFlag = SimpleWeather.debugFlag;
+    //private static boolean debugFlag = SimpleWeather.debugFlag;
 
-  // class constants
-  private final int VDD_SENSE_AD = 0;
-  private final int CURRENT_SENSE_AD = 2;
+    // class constants
+    private final int VDD_SENSE_AD = 0;
+    private final int CURRENT_SENSE_AD = 2;
 
-  public HumiditySensor(DSPortAdapter adapter, String deviceID, Properties ps)
-  {
-    // get an instance of the 1-wire device
-    humidityDevice = new OneWireContainer26(adapter, deviceID);
-    this.resetAverage();
-  }
-  
-  public float getHumidity() throws SimpleWeatherException 
-  {
-    float humidity;
-    
-    if (humidityDevice == null) {
-        throw new SimpleWeatherException("No humidity device");
+    public HumiditySensor(DSPortAdapter adapter, String deviceID, Properties ps) {
+        // get an instance of the 1-wire device
+        humidityDevice = new OneWireContainer26(adapter, deviceID);
+        this.resetAverage();
     }
-   
-    if (debugFlag)
-    {
-      System.out.print("Humidity: Device = " + humidityDevice.getName());
-      System.out.print("  ID = " + humidityDevice.getAddressAsString() + "\n");
-    }
-    try
-    {
-      // read 1-wire device's internal temperature sensor
-      byte[] state = humidityDevice.readDevice();
-      humidityDevice.doTemperatureConvert(state);
-      double temp = humidityDevice.getTemperature(state);
 
-      // Read humidity sensor's output voltage
-      humidityDevice.doADConvert(OneWireContainer26.CHANNEL_VAD, state);
-      double Vad = humidityDevice.getADVoltage(OneWireContainer26.CHANNEL_VAD, state);
+    public float getHumidity() throws SimpleWeatherException {
+        float humidity;
 
-      // Read the humidity sensor's power supply voltage
-      humidityDevice.doADConvert(OneWireContainer26.CHANNEL_VDD, state);
-      double Vdd = humidityDevice.getADVoltage(OneWireContainer26.CHANNEL_VDD, state);
+        if (humidityDevice == null) {
+            throw new SimpleWeatherException("No humidity device");
+        }
 
-      // calculate humidity
-      double rh = (Vad/Vdd - 0.16) / 0.0062;
-      humidity = (float)(rh / (1.0546 - 0.00216 * temp));
+        if (debugFlag) {
+            System.out.print("Humidity: Device = " + humidityDevice.getName());
+            System.out.print("  ID = " + humidityDevice.getAddressAsString() + "\n");
+        }
+        try {
+            // read 1-wire device's internal temperature sensor
+            byte[] state = humidityDevice.readDevice();
+            humidityDevice.doTemperatureConvert(state);
+            double temp = humidityDevice.getTemperature(state);
 
-      // apply calibration
-      humidity = humidity * HUMIDITY_GAIN + HUMIDITY_OFFSET;
-      if (humidity > 100.0) {
+            // Read humidity sensor's output voltage
+            humidityDevice.doADConvert(OneWireContainer26.CHANNEL_VAD, state);
+            double Vad = humidityDevice.getADVoltage(OneWireContainer26.CHANNEL_VAD, state);
+
+            // Read the humidity sensor's power supply voltage
+            humidityDevice.doADConvert(OneWireContainer26.CHANNEL_VDD, state);
+            double Vdd = humidityDevice.getADVoltage(OneWireContainer26.CHANNEL_VDD, state);
+
+            // calculate humidity
+            double rh = (Vad / Vdd - 0.16) / 0.0062;
+            humidity = (float) (rh / (1.0546 - 0.00216 * temp));
+
+            // apply calibration
+            humidity = humidity * HUMIDITY_GAIN + HUMIDITY_OFFSET;
+            if (humidity > 100.0) {
 //		OneWireException e = new OneWireException();
 //		throw(e);
-              humidity = 100.0f;
-      }
+                humidity = 100.0f;
+            }
 
-      if (debugFlag)
-      {
-        System.out.println("Supply Voltage = " + Vdd + " Volts");
-        System.out.println("Sensor Output  = " + Vad + " Volts");
-        System.out.println("Temperature    = " + temp + " C / " + ((temp * 9/5) + 32) + " F");
-        System.out.println("Uncomp RH      = " + rh + "%");
-        System.out.println("Hum Gain       = " + HUMIDITY_GAIN);
-        System.out.println("Hum Offset     = " + HUMIDITY_OFFSET);
-        System.out.println("Calibrated RH   = " + humidity + "%\n");
-      }
-    }
-    catch (OneWireException e)
-    {
-      throw new SimpleWeatherException("" + e);
+            if (debugFlag) {
+                System.out.println("Supply Voltage = " + Vdd + " Volts");
+                System.out.println("Sensor Output  = " + Vad + " Volts");
+                System.out.println("Temperature    = " + temp + " C / " + ((temp * 9 / 5) + 32) + " F");
+                System.out.println("Uncomp RH      = " + rh + "%");
+                System.out.println("Hum Gain       = " + HUMIDITY_GAIN);
+                System.out.println("Hum Offset     = " + HUMIDITY_OFFSET);
+                System.out.println("Calibrated RH   = " + humidity + "%\n");
+            }
+        } catch (OneWireException e) {
+            throw new SimpleWeatherException("" + e);
+        }
+
+        return humidity;
     }
 
-    return humidity;
-  }
-  
 //  public float calcDewpoint(float temp, float hum)
 //  {
 //    // compute the dewpoint from relative humidity & temperature
@@ -129,7 +118,6 @@ public class HumiditySensor extends AbstractSensor
 //    
 //    return (float)dp;
 //  }
-
 //  public float getSolarLevel() throws OneWireException
 //  {
 //    double level = -999.9;
@@ -182,28 +170,24 @@ public class HumiditySensor extends AbstractSensor
 //    // return a float
 //    return (float)level;
 //  }
-  
-    public String getHum()
-    {
+    public String getHum() {
         return getAverage(1);
     }
-    
-    public void update()
-  {
-    try {
-        float data = this.getHumidity();
-        System.out.println("Humidity = " + data + "%");
-        updateAverage(data);
-    } catch (SimpleWeatherException e) {
-        System.out.println("Error Reading Humidity: " + e);
+
+    public void update() {
+        try {
+            float data = this.getHumidity();
+            System.out.println("Humidity = " + data + "%");
+            updateAverage(data);
+        } catch (SimpleWeatherException e) {
+            System.out.println("Error Reading Humidity: " + e);
+        }
     }
-  }
-    
-  public Properties getResults()
-  {
-      Properties p = new Properties();
-      p.setProperty("humidity", getAverage(1));
-      
-      return p;
-  }
+
+    public Properties getResults() {
+        Properties p = new Properties();
+        p.setProperty("humidity", getAverage(1));
+
+        return p;
+    }
 }

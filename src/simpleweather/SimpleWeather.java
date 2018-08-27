@@ -19,7 +19,7 @@ import com.dalsemi.onewire.adapter.*;
 
 public class SimpleWeather {
 
-    public static final String VERSION = "SimpleWeather 2.1.9 27.08.2018";
+    public static final String VERSION = "SimpleWeather 2.1.10 27.08.2018";
     private static String MEASUREMENT_INTERVAL; //  Interval between measurements in seconds. Must divide 60.
     public static String WWW = "www.xland.ru";
     public static String URL = "/cgi-bin/meteo_upd";
@@ -28,8 +28,8 @@ public class SimpleWeather {
     public static long timestamp;
     public static int measurement;
     public static Properties ps;
-    public Enumeration sensors;
-    public static Vector sensor_vector = new Vector(10, 1);
+    public Enumeration<ISensor> sensors;
+    public static Vector<ISensor> sensor_vector = new Vector<ISensor>(10, 1);
     public int secs = 0;
     public int humidityErrorCnt = 0;
     public int pressureErrorCnt = 0;
@@ -74,7 +74,7 @@ public class SimpleWeather {
         String ADAPTER_TYPE = ps.getProperty("ADAPTER_TYPE");
         String ONE_WIRE_SERIAL_PORT = ps.getProperty("ONE_WIRE_SERIAL_PORT");
 
-        Enumeration pse = ps.keys();
+        Enumeration<Object> pse = ps.keys();
         while (pse.hasMoreElements()) {
             String str = (String) pse.nextElement();
             System.out.println(str + "=" + SimpleWeather.ps.getProperty(str));
@@ -211,7 +211,7 @@ public class SimpleWeather {
                 sensors = sensor_vector.elements();
 
                 while (sensors.hasMoreElements()) {
-                    ISensor s = (ISensor) sensors.nextElement();
+                    ISensor s = sensors.nextElement();
                     s.update();
                 }
 
@@ -224,7 +224,7 @@ public class SimpleWeather {
                     sensors = sensor_vector.elements();
 
                     while (sensors.hasMoreElements()) {
-                        ISensor s = (ISensor) sensors.nextElement();
+                        ISensor s = sensors.nextElement();
                         s.resetAverage();
                     }
 
