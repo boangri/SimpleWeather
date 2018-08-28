@@ -19,7 +19,7 @@ import com.dalsemi.onewire.adapter.*;
 
 public class SimpleWeather {
 
-    public static final String VERSION = "SimpleWeather 2.1.11 27.08.2018";
+    public static final String VERSION = "SimpleWeather 2.1.12 28.08.2018";
     private static String MEASUREMENT_INTERVAL; //  Interval between measurements in seconds. Must divide 60.
     public static String WWW = "www.xland.ru";
     public static String URL = "/cgi-bin/meteo_upd";
@@ -170,18 +170,12 @@ public class SimpleWeather {
         MEASUREMENT_INTERVAL = ps.getProperty("MEASUREMENT_INTERVAL");
         WWW = ps.getProperty("WWW");
         URL = ps.getProperty("URL");
-
         StationID = ps.getProperty("StationID");
-
         measurement = 0;
     }
 
     public void mainLoop() throws NumberFormatException {
-        Date date = new Date();
-        Calendar now = Calendar.getInstance();
-        int second;
-        int minute, lastMinute = -99;
-        //int hour;
+        Date date;
         int interval = Integer.parseInt(MEASUREMENT_INTERVAL);
         boolean quit = false;
         InputStreamReader in = new InputStreamReader(System.in);
@@ -196,11 +190,9 @@ public class SimpleWeather {
 
             // check current time
             timestamp = System.currentTimeMillis() / 1000;
-            second = now.get(Calendar.SECOND); 
-            minute = now.get(Calendar.MINUTE); 
+            date = new Date();
             
-            //if (minute != lastMinute)
-            if ((second % interval) == 0) {
+            if ((timestamp % interval) == 0) {
                 System.out.println("");
                 System.out.println("Time = " + date);
                 measurement += 1;
@@ -213,10 +205,7 @@ public class SimpleWeather {
                     s.update();
                 }
 
-                // update the time
-                lastMinute = minute;
-
-                if ((minute % 5 == 0) && (second == 0)) {
+                if ((timestamp % 300) == 0)  {
                     wu.send();
 
                     sensors = sensor_vector.elements();
