@@ -202,7 +202,9 @@ public class SimpleWeather {
 
                 while (sensors.hasMoreElements()) {
                     ISensor s = sensors.nextElement();
-                    s.update();
+                    if (s.isReady()) {
+                        s.update();
+                    }
                 }
 
                 if ((timestamp % 300) == 0)  {

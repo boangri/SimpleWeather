@@ -28,6 +28,7 @@ public class WindDirSensor extends AbstractSensor {
     public WindDirSensor(DSPortAdapter adapter, String windDirDeviceID, Properties ps) {
         // get instances of the 1-wire devices
         windDirDevice = new OneWireContainer20(adapter, windDirDeviceID);
+        this.ready = true;
         NORTH_OFFSET = ps.getProperty("NORTH_OFFSET");
         if (NORTH_OFFSET != null) {
             north_offset = Integer.valueOf(NORTH_OFFSET);

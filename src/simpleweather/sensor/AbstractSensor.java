@@ -18,7 +18,12 @@ public abstract class AbstractSensor implements ISensor {
     protected float sumSquares;
     protected int samples;
     protected String name;
+    protected boolean ready;
 
+    public boolean isReady() {
+        return this.ready;
+    }
+    
     abstract public void update();
 
     abstract public Properties getResults();

@@ -23,6 +23,7 @@ public class TempSensor extends AbstractSensor {
 
     public TempSensor(DSPortAdapter adapter, String deviceID, String name) {
         this.name = name;
+        this.ready = true;
         // get instances of the 1-wire devices
         switch (deviceID.substring(14, 16)) {
             case "10":
@@ -39,7 +40,8 @@ public class TempSensor extends AbstractSensor {
                         }
                     }
                 } catch (OneWireException e) {
-                    System.out.println("Error Setting Resolution: " + e);
+                    System.out.println(this.name + ": Error Setting Resolution: " + e);
+                    this.ready = false;
                 }
                 break;
             case "28":
@@ -57,11 +59,13 @@ public class TempSensor extends AbstractSensor {
                         }
                     }
                 } catch (OneWireException e) {
-                    System.out.println("Error Setting Resolution: " + e);
+                    System.out.println(this.name + ": Error Setting Resolution: " + e);
+                    this.ready = false;
                 }
                 break;
             default:
-                System.out.println("Invalid device ID: " + deviceID);
+                System.out.println(this.name + ": Invalid device ID: " + deviceID);
+                this.ready = false;
         }
         this.resetAverage();
     }

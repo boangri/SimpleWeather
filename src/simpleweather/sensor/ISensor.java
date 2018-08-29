@@ -13,6 +13,8 @@ import java.util.Properties;
  */
 public interface ISensor {
 
+    public boolean isReady();
+    
     public void update();
 
     public void resetAverage();

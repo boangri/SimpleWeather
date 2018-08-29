@@ -27,6 +27,7 @@ public class WindSpeedSensor extends AbstractSensor {
     public WindSpeedSensor(DSPortAdapter adapter, String windSpdDeviceID, Properties ps) {
         // get instances of the 1-wire devices
         windSpdDevice = new OneWireContainer1D(adapter, windSpdDeviceID);
+        this.ready = true;
         WIND_RADIUS = ps.getProperty("WIND_RADIUS");
         if (WIND_RADIUS != null) {
             radius = Float.valueOf(WIND_RADIUS);
@@ -37,6 +38,7 @@ public class WindSpeedSensor extends AbstractSensor {
                 lastCount = windSpdDevice.readCounter(15);
             } catch (OneWireException e) {
                 System.out.print("Can't create Conatiner20\n");
+                this.ready = false;
             }
             this.resetAverage();
         }
