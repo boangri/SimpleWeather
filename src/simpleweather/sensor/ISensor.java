@@ -15,6 +15,8 @@ public interface ISensor {
 
     public boolean isReady();
     
+    public boolean checkSensor();
+    
     public void update();
 
     public void resetAverage();

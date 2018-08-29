@@ -24,6 +24,11 @@ public abstract class AbstractSensor implements ISensor {
         return this.ready;
     }
     
+    public boolean checkSensor() {
+        System.out.println("Implement chackSensor()!!!");
+        return false;
+    }
+    
     abstract public void update();
 
     abstract public Properties getResults();

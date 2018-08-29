@@ -27,7 +27,7 @@ public class WindSpeedSensor extends AbstractSensor {
     public WindSpeedSensor(DSPortAdapter adapter, String windSpdDeviceID, Properties ps) {
         // get instances of the 1-wire devices
         windSpdDevice = new OneWireContainer1D(adapter, windSpdDeviceID);
-        this.ready = true;
+        this.ready = this.checkSensor();
         WIND_RADIUS = ps.getProperty("WIND_RADIUS");
         if (WIND_RADIUS != null) {
             radius = Float.valueOf(WIND_RADIUS);
@@ -110,5 +110,16 @@ public class WindSpeedSensor extends AbstractSensor {
         p.setProperty("wspdpk", getWindPk());
 
         return p;
+    }
+    
+    @Override
+    public boolean checkSensor() {
+        try {
+            windSpdDevice.readCounter(15);
+            this.ready = true;
+        } catch (OneWireException e) {
+            this.ready = false;
+        }
+        return this.ready;
     }
 }

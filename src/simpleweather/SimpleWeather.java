@@ -30,7 +30,6 @@ public class SimpleWeather {
     public static Properties ps;
     public Enumeration<ISensor> sensors;
     public static Vector<ISensor> sensor_vector = new Vector<ISensor>(10, 1);
-    public int secs = 0;
     public int humidityErrorCnt = 0;
     public int pressureErrorCnt = 0;
     public int solarErrorCnt = 0;
@@ -93,7 +92,6 @@ public class SimpleWeather {
                 System.out.println("Error: Unable to find 1-Wire adapter!");
                 System.exit(1);
             }
-
             // reset the 1-Wire bus
             resetBus();
         } catch (OneWireException e) {
@@ -215,9 +213,10 @@ public class SimpleWeather {
                     while (sensors.hasMoreElements()) {
                         ISensor s = sensors.nextElement();
                         s.resetAverage();
+                        if (!s.isReady()) {
+                            s.checkSensor();
+                        }
                     }
-
-                    secs = 0;
                 }
             }
 
@@ -242,10 +241,9 @@ public class SimpleWeather {
     private void resetBus() // reset the 1-wire bus
     {
         System.out.println("Resetting 1-wire bus");
-
         try {
             int result = adapter.reset();
-
+            
             if (result == 0) {
                 System.out.println("Warning: Reset indicates no Device Present");
             }

@@ -34,7 +34,7 @@ public class BaroSensor extends AbstractSensor {
     public BaroSensor(DSPortAdapter adapter, String deviceID, Properties ps) {
         // get instances of the 1-wire devices
         baroDevice = new OneWireContainer26(adapter, deviceID);
-        this.ready = true;
+        this.ready = this.checkSensor();
         this.resetAverage();
     }
 
@@ -96,5 +96,16 @@ public class BaroSensor extends AbstractSensor {
         p.setProperty("baromin", getAverage(1));
 
         return p;
+    }
+    
+    @Override
+    public boolean checkSensor() {
+        try {
+            baroDevice.readDevice();
+            this.ready = true;
+        } catch (OneWireException e) {
+            this.ready = false;
+        }
+        return this.ready;
     }
 }
