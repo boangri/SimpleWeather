@@ -41,6 +41,7 @@ public class HumiditySensor extends AbstractSensor {
     public HumiditySensor(DSPortAdapter adapter, String deviceID, Properties ps) {
         // get an instance of the 1-wire device
         humidityDevice = new OneWireContainer26(adapter, deviceID);
+        this.ready = this.checkSensor();
         this.resetAverage();
     }
 
@@ -189,5 +190,16 @@ public class HumiditySensor extends AbstractSensor {
         p.setProperty("humidity", getAverage(1));
 
         return p;
+    }
+    
+    @Override
+    public boolean checkSensor() {
+        try {
+            humidityDevice.readDevice();
+            this.ready = true;
+        } catch (OneWireException e) {
+            this.ready = false;
+        }
+        return this.ready;
     }
 }

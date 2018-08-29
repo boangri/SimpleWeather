@@ -22,11 +22,12 @@ public class TempSensor extends AbstractSensor {
     private TemperatureContainer tempDevice = null;
 
     public TempSensor(DSPortAdapter adapter, String deviceID, String name) {
-        this.name = name;
+        this.name = name;     
         // get instances of the 1-wire devices
         switch (deviceID.substring(14, 16)) {
             case "10":
                 tempDevice = new OneWireContainer10(adapter, deviceID);
+                this.ready = this.checkSensor();
                 try {
                     if (tempDevice.hasSelectableTemperatureResolution()) {
                         // set resolution to max
@@ -39,11 +40,13 @@ public class TempSensor extends AbstractSensor {
                         }
                     }
                 } catch (OneWireException e) {
-                    System.out.println("Error Setting Resolution: " + e);
+                    System.out.println(this.name + ": Error Setting Resolution: " + e);
+                    this.ready = false;
                 }
                 break;
             case "28":
                 tempDevice = new OneWireContainer28(adapter, deviceID);
+                this.ready = this.checkSensor();
                 // does this temp sensor have greater than .5 deg resolution?
                 try {
                     if (tempDevice.hasSelectableTemperatureResolution()) {
@@ -57,11 +60,13 @@ public class TempSensor extends AbstractSensor {
                         }
                     }
                 } catch (OneWireException e) {
-                    System.out.println("Error Setting Resolution: " + e);
+                    System.out.println(this.name + ": Error Setting Resolution: " + e);
+                    this.ready = false;
                 }
                 break;
             default:
-                System.out.println("Invalid device ID: " + deviceID);
+                System.out.println(this.name + ": Invalid device ID: " + deviceID);
+                this.ready = false;
         }
         this.resetAverage();
     }
@@ -115,5 +120,16 @@ public class TempSensor extends AbstractSensor {
         p.setProperty(name, getAverage(1));
 
         return p;
+    }
+    
+    @Override
+    public boolean checkSensor() {
+        try {
+            tempDevice.readDevice();
+            this.ready = true;
+        } catch (OneWireException e) {
+            this.ready = false;
+        }
+        return this.ready;
     }
 }
