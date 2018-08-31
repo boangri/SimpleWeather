@@ -16,10 +16,11 @@ import java.io.*;
 
 import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
+import com.dalsemi.onewire.container.OneWireContainer;
 
 public class SimpleWeather {
 
-    public static final String VERSION = "SimpleWeather 2.1.13 29.08.2018";
+    public static final String VERSION = "SimpleWeather 2.1.14 31.08.2018";
     private static String MEASUREMENT_INTERVAL; //  Interval between measurements in seconds. Must divide 60.
     public static String WWW = "www.xland.ru";
     public static String URL = "/cgi-bin/meteo_upd";
@@ -80,6 +81,7 @@ public class SimpleWeather {
         }
         ISensor s;
         String ID;
+        OneWireContainer owd;
 
         // get the 1-wire adapter
         try {
@@ -92,6 +94,27 @@ public class SimpleWeather {
                 System.out.println("Error: Unable to find 1-Wire adapter!");
                 System.exit(1);
             }
+            
+            // get exclusive use of adapter
+            adapter.beginExclusive(true);
+
+            // clear any previous search restrictions
+            adapter.setSearchAllDevices();
+            adapter.targetAllFamilies();
+            adapter.setSpeed(adapter.SPEED_REGULAR);
+
+            // enumerate through all the 1-Wire devices found
+            for (Enumeration owd_enum = adapter.getAllDeviceContainers();
+                    owd_enum.hasMoreElements();) {
+                owd = (OneWireContainer) owd_enum.nextElement();
+
+                //System.out.println(owd.getAddressAsString());
+                System.out.println(owd.toString());
+            }
+
+            // end exclusive use of adapter
+            adapter.endExclusive();
+            
             // reset the 1-Wire bus
             resetBus();
         } catch (OneWireException e) {
