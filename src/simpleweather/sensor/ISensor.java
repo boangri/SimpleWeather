@@ -5,6 +5,7 @@
  */
 package simpleweather.sensor;
 
+import com.dalsemi.onewire.container.*;
 import java.util.Properties;
 
 /**

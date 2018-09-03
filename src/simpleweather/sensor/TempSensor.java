@@ -14,6 +14,7 @@ package simpleweather.sensor;
 import com.dalsemi.onewire.*;
 import com.dalsemi.onewire.adapter.*;
 import com.dalsemi.onewire.container.*;
+import com.dalsemi.onewire.utils.Address;
 import simpleweather.SimpleWeatherException;
 import java.util.Properties;
 
@@ -22,11 +23,12 @@ public class TempSensor extends AbstractSensor {
     private TemperatureContainer tempDevice = null;
 
     public TempSensor(DSPortAdapter adapter, String deviceID, String name) {
-        this.name = name;     
+        this.name = name;  
         // get instances of the 1-wire devices
         switch (deviceID.substring(14, 16)) {
             case "10":
                 tempDevice = new OneWireContainer10(adapter, deviceID);
+                this.device = (OneWireContainer)tempDevice;
                 this.ready = this.checkSensor();
                 try {
                     if (tempDevice.hasSelectableTemperatureResolution()) {
@@ -46,6 +48,7 @@ public class TempSensor extends AbstractSensor {
                 break;
             case "28":
                 tempDevice = new OneWireContainer28(adapter, deviceID);
+                this.device = (OneWireContainer)tempDevice;
                 this.ready = this.checkSensor();
                 // does this temp sensor have greater than .5 deg resolution?
                 try {
@@ -120,16 +123,5 @@ public class TempSensor extends AbstractSensor {
         p.setProperty(name, getAverage(1));
 
         return p;
-    }
-    
-    @Override
-    public boolean checkSensor() {
-        try {
-            tempDevice.readDevice();
-            this.ready = true;
-        } catch (OneWireException e) {
-            this.ready = false;
-        }
-        return this.ready;
     }
 }

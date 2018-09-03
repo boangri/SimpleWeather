@@ -18,6 +18,7 @@ public abstract class AbstractSensor implements ISensor {
     protected float sumSquares;
     protected int samples;
     protected String name;
+    protected OneWireContainer device;
     protected boolean ready;
 
     public boolean isReady() {
@@ -25,8 +26,12 @@ public abstract class AbstractSensor implements ISensor {
     }
     
     public boolean checkSensor() {
-        System.out.println("Implement chackSensor()!!!");
-        return false;
+        try {
+            this.ready = device.isPresent();
+        } catch (OneWireException e) {
+            this.ready = false;
+        }
+        return this.ready;
     }
     
     abstract public void update();

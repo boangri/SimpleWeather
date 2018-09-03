@@ -33,6 +33,7 @@ public class RainSensor extends AbstractSensor {
     public RainSensor(DSPortAdapter adapter, String deviceID, Properties ps) {
         // get instances of the 1-wire devices
         rainDevice = new OneWireContainer1D(adapter, deviceID);
+        this.device = (OneWireContainer)rainDevice;
         this.ready = this.checkSensor();
         RAIN_OFFSET = ps.getProperty("RAIN_OFFSET");
         if (RAIN_OFFSET != null) {
@@ -127,16 +128,5 @@ public class RainSensor extends AbstractSensor {
         p.setProperty("raincnt", getRain());
 
         return p;
-    }
-    
-    @Override
-    public boolean checkSensor() {
-        try {
-            rainDevice.readCounter(15);
-            this.ready = true;
-        } catch (OneWireException e) {
-            this.ready = false;
-        }
-        return this.ready;
     }
 }
