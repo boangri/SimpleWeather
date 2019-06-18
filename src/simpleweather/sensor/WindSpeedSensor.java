@@ -61,7 +61,11 @@ public class WindSpeedSensor extends AbstractSensor {
         if (((currentCount - lastCount) >= 0) && ((currentTicks - lastTicks) >= 0)) {
             windSpeed = (float) (currentCount - lastCount) / (float) (currentTicks - lastTicks) * 1000f * 6.28f * radius;
         } else {
-            throw new OneWireException("Could not get data");
+            long tmp;
+            tmp = lastCount;
+            lastCount = currentCount;
+            lastTicks = currentTicks;
+            throw new OneWireException("LastCount is greater than current: " + tmp);
         }
 
         if (debugFlag) {
