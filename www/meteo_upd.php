@@ -29,9 +29,9 @@ foreach ($_GET as $name => $value) {
 
 $uts = $ts;
 
-#
-#	read rainCounter.txt
-#
+//#
+//#	read rainCounter.txt
+//#
 $rcd = $raincnt === 'U' ? 'U' : dailyrain($raincnt);
 $rcw = $raincnt === 'U' ? 'U' : weeklyrain($raincnt);
 $rcm = $raincnt === 'U' ? 'U' : monthlyrain($raincnt);
@@ -95,21 +95,18 @@ rrd_update("$DIR/heater2.rrd", array("$ts:$temp3:$temp22:$low:$high:$secs:$cnt")
 echo "success\n";
 log("$ts:$temp2:$dewpoint:$humidity:$rain:$dailyrain:$presshpa:$wdir:$wspd:$wspdpk");
 
-#
-#	MySQL update
-#
-$dbh = DBI->connect("DBI:mysql:$db_name:localhost:3306", $db_user, $db_pass);
+//
+//	MySQL update
+//
+//$dbh = DBI->connect("DBI:mysql:$db_name:localhost:3306", $db_user, $db_pass);
 
 try {
     $conn = new \mysqli($db_host, $db_user, $db_pass, $db_name);
 } catch (\Exception $e) {
     $conn = false;
     log("Could not connect to MySQL: " . $e->getMessage());
-    exit();
+    exit(1);
 }
-
-
-
 
 $ts = $uts === 'U' ? "NULL" : $uts;
 $temp = $temp2 === 'U' ? "NULL" : sprintf("%.1f", $temp2 - 0.57);
@@ -121,18 +118,17 @@ $wdir = $wdir === 'U' ? "NULL" : $wdir;
 $raincnt $raincnt === 'U' ? "NULL" : $raincnt;
 $solar = $solar === 'U' ? "NULL" : $solar;
 
-$cmd = "INSERT INTO meteo_data(ts, temp, pressure, humidity, 
+$sql = "INSERT INTO meteo_data(ts, temp, pressure, humidity, 
 	wind_dir, wind_spd, wind_gust, rain, station_id, solar) 
 	VALUES ($ts, $temp, $pressure, $humidity,
 	$wdir, $wspd, $wspdpk, $raincnt, '$id', $solar)";
 
-$sth = $dbh->prepare($cmd);
-$rv = $sth->execute;
+$res = $conn->query($sql);
 
-$sth->finish;
-$dbh->disconnect;
-
-
+if (!$res) {
+    log("Could not insert row to MySQL");
+    exit(1);
+}
 
 function log($msg)
 {
