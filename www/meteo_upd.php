@@ -93,7 +93,7 @@ $dewpoint = sprintf("%.1f", $dewpoint - 0.57);
 //rrd_update("DIR/b1der.rrd", array("$ts:$b1der"));
 //rrd_update("$DIR/heater2.rrd", array("$ts:$temp3:$temp22:$low:$high:$secs:$cnt"));
 echo "success\n";
-mylog("$ts:$temp2:$dewpoint:$humidity:$rain:$dailyrain:$presshpa:$wdir:$wspd:$wspdpk");
+mylog("$ts:$temp2:$dewpoint:$humidity:$rain:$dailyrainmm:$presshpa:$wdir:$wspd:$wspdpk");
 
 //
 //	MySQL update
