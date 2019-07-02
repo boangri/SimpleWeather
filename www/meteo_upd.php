@@ -115,7 +115,7 @@ $humidity = $humidity === 'U' ? "NULL" : $humidity;
 $wspd = $wspd === 'U' ? "NULL" : $wspd;
 $wspdpk = $wspdpk === 'U' ? "NULL" : $wspdpk;
 $wdir = $wdir === 'U' ? "NULL" : $wdir;
-$raincnt $raincnt === 'U' ? "NULL" : $raincnt;
+$raincnt = $raincnt === 'U' ? "NULL" : $raincnt;
 $solar = $solar === 'U' ? "NULL" : $solar;
 
 $sql = "INSERT INTO meteo_data(ts, temp, pressure, humidity, 
