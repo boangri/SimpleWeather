@@ -68,7 +68,7 @@ if ($id !== 'home') {
     rrd_update("$DIR/$id/weather.rrd",
         array("$ts:$temp21:$dewpoint:$humidity:$rainmm:$raincntmm:$presshpa:$wdir:$wspd:$wspdpk"));
     echo "success $ts:$temp3:$dewpoint:$humidity:$rainmm:$raincntmm:$presshpa:$wdir:$wspd:$wspdpk\n";
-    log("$id:$ts1:$temp3:$low:$high:$secs:$cnt");
+    mylog("$id:$ts1:$temp3:$low:$high:$secs:$cnt");
     exit();
 }
 
@@ -93,7 +93,7 @@ $b1der = 10*$temp23;
 rrd_update("DIR/b1der.rrd", array("$ts:$b1der"));
 rrd_update("$DIR/heater2.rrd", array("$ts:$temp3:$temp22:$low:$high:$secs:$cnt"));
 echo "success\n";
-log("$ts:$temp2:$dewpoint:$humidity:$rain:$dailyrain:$presshpa:$wdir:$wspd:$wspdpk");
+mylog("$ts:$temp2:$dewpoint:$humidity:$rain:$dailyrain:$presshpa:$wdir:$wspd:$wspdpk");
 
 //
 //	MySQL update
@@ -104,7 +104,7 @@ try {
     $conn = new \mysqli($db_host, $db_user, $db_pass, $db_name);
 } catch (\Exception $e) {
     $conn = false;
-    log("Could not connect to MySQL: " . $e->getMessage());
+    mylog("Could not connect to MySQL: " . $e->getMessage());
     exit(1);
 }
 
@@ -126,11 +126,11 @@ $sql = "INSERT INTO meteo_data(ts, temp, pressure, humidity,
 $res = $conn->query($sql);
 
 if (!$res) {
-    log("Could not insert row to MySQL");
+    mylog("Could not insert row to MySQL");
     exit(1);
 }
 
-function log($msg)
+function mylog($msg)
 {
     file_put_contents('/home/boris/WeatherToys/mysw/meteo_upd.log',
         date("ymd-Hi ") . $msg . "\n", FILE_APPEND);
