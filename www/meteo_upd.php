@@ -81,10 +81,10 @@ rrd_update("$DIR/wind.rrd", array("$ts:$temp1:$wspd:$wspdpk:$wdir"));
 rrd_update("$DIR/temp2.rrd", array("$ts:$temp2"));
 rrd_update("$DIR/temp3.rrd", array("$ts:$temp3"));
 rrd_update("$DIR/rumb.rrd", array("N:22.5"));
-rrd_update("DIR/rest.rrd", array("$ts:$temp4:$dewpoint:$humidity:$rainin:$dailyrainin:$pressure"));
+rrd_update("$DIR/rest.rrd", array("$ts:$temp4:$dewpoint:$humidity:$rainin:$dailyrainin:$pressure"));
 rrd_update("$DIR/home/weather.rrd",
     array("$ts:$temp:$dewpoint:$humidity:$rainmm:$raincntmm:$presshpa:$wdir:$wspd:$wspdpk"));
-rrd_update("DIR/td/weather.rrd",
+rrd_update("$DIR/td/weather.rrd",
     array("$ts:$temp:$dewpoint:$humidity:$rainmm:$presshpa:$wdir:$wspd:$wspdpk:$solar"));
 rrd_update("$DIR/solar.rrd", array("$ts:$solar"));
 //rrd_update("DIR/heater.rrd", array("$ts:$temp3:$low:$high:$secs:$cnt"));
