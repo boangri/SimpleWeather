@@ -197,6 +197,10 @@ function yearlyrain($rc)
  */
 function rrd_update($rrdfile, $data)
 {
-    mylog("rrd_update({$rrdfile}, {$data[0]})");
+    foreach ($data as $datum) {
+        passthru("/usr/bin/rrdtool update " . $rrdfile . ' ' . $datum, $res);
+        mylog("/usr/bin/rrdtool update " . $rrdfile . ' ' . $datum . "=>{$res}");
+    }
+
     return 0;
 }
