@@ -64,42 +64,40 @@ if ($humidity > 100) {
 $temp = sprintf("%.1f", $temp2 - 0.57);
 $dewpoint = sprintf("%.1f", $dewpoint - 0.57);
 
-//if ($id !== 'home') {
-//    rrd_update("$DIR/$id/weather.rrd",
-//        array("$ts:$temp21:$dewpoint:$humidity:$rainmm:$raincntmm:$presshpa:$wdir:$wspd:$wspdpk"));
-//    echo "success $ts:$temp3:$dewpoint:$humidity:$rainmm:$raincntmm:$presshpa:$wdir:$wspd:$wspdpk\n";
-//    mylog("$id:$ts1:$temp3:$low:$high:$secs:$cnt");
-//    exit();
-//}
+if ($id !== 'home') {
+    rrd_update("$DIR/$id/weather.rrd",
+        array("$ts:$temp21:$dewpoint:$humidity:$rainmm:$raincntmm:$presshpa:$wdir:$wspd:$wspdpk"));
+    echo "success $ts:$temp3:$dewpoint:$humidity:$rainmm:$raincntmm:$presshpa:$wdir:$wspd:$wspdpk\n";
+    mylog("$id:$ts1:$temp3:$low:$high:$secs:$cnt");
+    exit();
+}
 
-//if ($temp21 !== 'U') {
-//    rrd_update("$DIR/camel/weather.rrd",
-//        array("$ts:$temp21:$dewpoint:$humidity:$rainmm:$raincntmm:$presshpa:$wdir:$wspd:$wspdpk"));
-//}
-//rrd_update("$DIR/wind.rrd", array("$ts:$temp1:$wspd:$wspdpk:$wdir"));
-//
-//rrd_update("$DIR/temp2.rrd", array("$ts:$temp2"));
-//rrd_update("$DIR/temp3.rrd", array("$ts:$temp3"));
-//rrd_update("$DIR/rumb.rrd", array("N:22.5"));
-//rrd_update("DIR/rest.rrd", array("$ts:$temp4:$dewpoint:$humidity:$rainin:$dailyrainin:$pressure"));
-//rrd_update("$DIR/home/weather.rrd",
-//    array("$ts:$temp:$dewpoint:$humidity:$rainmm:$raincntmm:$presshpa:$wdir:$wspd:$wspdpk"));
-//rrd_update("DIR/td/weather.rrd",
-//    array("$ts:$temp:$dewpoint:$humidity:$rainmm:$presshpa:$wdir:$wspd:$wspdpk:$solar"));
-//rrd_update("$DIR/solar.rrd", array("$ts:$solar"));
-//rrd_update("DIR/heater.rrd", array("$ts:$temp3:$low:$high:$secs:$cnt"));
-//rrd_update("$DIR/b1.rrd", array("$ts:$temp23:$low:$high"));
-//$b1der = 10*$temp23;
-//rrd_update("DIR/b1der.rrd", array("$ts:$b1der"));
-//rrd_update("$DIR/heater2.rrd", array("$ts:$temp3:$temp22:$low:$high:$secs:$cnt"));
+if ($temp21 !== 'U') {
+    rrd_update("$DIR/camel/weather.rrd",
+        array("$ts:$temp21:$dewpoint:$humidity:$rainmm:$raincntmm:$presshpa:$wdir:$wspd:$wspdpk"));
+}
+rrd_update("$DIR/wind.rrd", array("$ts:$temp1:$wspd:$wspdpk:$wdir"));
+
+rrd_update("$DIR/temp2.rrd", array("$ts:$temp2"));
+rrd_update("$DIR/temp3.rrd", array("$ts:$temp3"));
+rrd_update("$DIR/rumb.rrd", array("N:22.5"));
+rrd_update("DIR/rest.rrd", array("$ts:$temp4:$dewpoint:$humidity:$rainin:$dailyrainin:$pressure"));
+rrd_update("$DIR/home/weather.rrd",
+    array("$ts:$temp:$dewpoint:$humidity:$rainmm:$raincntmm:$presshpa:$wdir:$wspd:$wspdpk"));
+rrd_update("DIR/td/weather.rrd",
+    array("$ts:$temp:$dewpoint:$humidity:$rainmm:$presshpa:$wdir:$wspd:$wspdpk:$solar"));
+rrd_update("$DIR/solar.rrd", array("$ts:$solar"));
+rrd_update("DIR/heater.rrd", array("$ts:$temp3:$low:$high:$secs:$cnt"));
+rrd_update("$DIR/b1.rrd", array("$ts:$temp23:$low:$high"));
+$b1der = 10*$temp23;
+rrd_update("DIR/b1der.rrd", array("$ts:$b1der"));
+rrd_update("$DIR/heater2.rrd", array("$ts:$temp3:$temp22:$low:$high:$secs:$cnt"));
 echo "success\n";
 mylog("$ts:$temp2:$dewpoint:$humidity:$rain:$dailyrainmm:$presshpa:$wdir:$wspd:$wspdpk");
 
 //
 //	MySQL update
 //
-//$dbh = DBI->connect("DBI:mysql:$db_name:localhost:3306", $db_user, $db_pass);
-
 try {
     $conn = new \mysqli($db_host, $db_user, $db_pass, $db_name);
 } catch (\Exception $e) {
@@ -192,3 +190,13 @@ function yearlyrain($rc)
     file_put_contents($RCFILE . '-y.txt', $dd . ',' . $rc);
 }
 
+/**
+ * @param $rrdfile path to rrd file
+ * @param array $data array of data to be written
+ * @return int 0 on success, 1 on failure
+ */
+function rrd_update($rrdfile, $data)
+{
+    mylog("rrd_update({$rrdfile}, {$data[0]})");
+    return 0;
+}
