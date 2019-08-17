@@ -95,7 +95,9 @@ rrd_update("$DIR/solar.rrd", array("$ts:$solar"));
 echo "success\n";
 mylog("$ts:$temp2:$humidity:$rainmm:$dailyrainmm:$presshpa:$wdir:$wspd:$wspdpk");
 
+//
 // Generate /weather/index.html
+//
 $subs = [
     'DAT' => 'date',
     'TIM' => 'time',
@@ -120,7 +122,6 @@ $subs = [
 
 $html = file_get_contents($udir . '/template.html');
 foreach ($subs as $key => $value) {
-    mylog("{$key} => {$$value}");
     $html = preg_replace("/%%{$key}%%/", $$value, $html);
 }
 file_put_contents($dir . '/index.html', $html);
