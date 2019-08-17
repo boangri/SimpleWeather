@@ -1,0 +1,38 @@
+<html>
+<!-- $Id: template.html,v 1.5 2010/01/06 19:51:56 boris Exp $ -->
+<head>
+<title>Current weather conditions in SNT "Tvoy dom"</title>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="/style.css">
+</head>
+<body>
+<h2 align="center">Current weather conditions in SNT "Tvoy dom"</h2>
+<b>Current weather conditions</b> at the point with the coordinates:<br>
+Lattitude: %%LAT%%, Longitude: %%LON%%<br>
+Date: %%DAT%% Time: %%TIM%%<hr>
+Air temperature, &deg;C: %%TEM%%<br>
+Pressure, mm Hg.: %%BAR%% ( %%GPS%% hPa) <br>
+Humidity, %: %%HUM%%<br>
+Dew point, &deg;C: %%DPT%%<br>
+Wind speed, m/s: %%WNS%% (average for 5 min)<br>
+Wind gusts: %%WNG%% (high for 5 min)<br>
+Wind Direction: %%WND%% &deg;<br>
+Precipitation, mm/hour: %%RAI%% (average for 5 min)<br>
+Precipitation today, mm: %%DRAI%% (since midnight 00:00 %%DAT%%)<br>
+Precipitation this week, mm: %%WRAI%% (since monday 00:00)<br>
+Precipitation this month, mm: %%MRAI%% (since 1st 00:00 )<br>
+Precipitation this year, mm: %%YRAI%% (since 00:00 2010/01/01)<br>
+<hr>
+The data were obtained with <a href="mystation.html">amateur weather station</a>, located in SNT "Tvoy dom" (Tula region) <br>
+<hr>
+<a href="http://www.wunderground.com/weatherstation/WXDailyHistory.asp?ID=IMOSCOWM4"><img src="http://banners.wunderground.com/cgi-bin/banner/ban/wxBanner?bannertype=WeatherStationCount&weatherstationcount=IMOSCOWM4" height="160" width="163" border="0" alt="Weather Underground PWS IMOSCOWM4" /></a>
+
+<a href="http://www.awekas.at/en/uebersicht.php?nid=128"><img src="http://www.awekas.at/images/awekas-bm1-e.jpg" alt="www.awekas.at" width="468" height="60" border="0"></a>
+<hr>
+<a href="/1-wire">Graphs</a> of values (RRDtool)<br>
+<a href="http://www.awekas.at/en/instrument.php?id=4757">Instruments</a> (AWEKAS network)
+<hr>
+<font size=-1>
+$Id: template.html,v 1.5 2010/01/06 19:51:56 boris Exp $<br>
+Page generated: %%TS%%
+</body>
+</html>

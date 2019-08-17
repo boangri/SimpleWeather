@@ -1,0 +1,49 @@
+<html>
+<!-- $Id $ -->
+<head>
+<title>My Weather Station</title>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="/style.css">
+</head>
+<body>
+<h2 align="center">My Weather Station</h2>
+
+I assembled an amateur weather station after Tim Bitson's "<a href="http://www.weathertoys.net/weathertoys/main.html">Weather Toys</a>" book and installed it on the balcony of my apartments.
+The station consists of a number of sensors, connected to the 1-wire bus (twisted pair). The bus adapter - DS9097U device is plugged in a serial port of a PC.
+Software application for data aquisition is written in Java. The PC runs under Linux. 
+<br><br>
+The sensors are polled every 30 seconds. Every 5 minutes averaged (over 10 measurements) data is dumped to a server with HTTP protocol.
+<br><br>
+The collected data is passed to a <a href="http://www.xland.ru/en">web-server</a> for public access. The data is presented as <a href="index.html">current values</a> and as <a href="/1-wire">graphs</a>. A MySQL DB is used for storing the collected data.
+<br><br>
+<b>Main components:</b>
+<li> tempearture sensors; 
+<li> WS-1 device for measurements of wind speed and direction;
+<li> <a href="http://www.hobby-boards.com/catalog/product_info.php?cPath=22&products_id=81">appliance</a> for precipitation measurements from RainWise company;
+<li> humidity and air pressure sensors;
+<li> <a href="http://www.hobby-boards.com/catalog/product_info.php?products_id=28">1-wire bus adapter</a> 
+<br>
+<br>
+All the components have been purchased at <a href="http://www.hobby-boards.com/catalog/main_page.php">HobbyBoards</a> site.
+<br>
+<br>
+The installation of the station at a balcony of 17-floor building does not meet all the requirements. Measurements of wind bearings suffer from closeness to the building wall. In fact, the station can measure only the wind along the wall.
+Precipitaion measurements may also be interfered by the wall when northern or eastern winds blow. 
+Unfortunately, the installation on the balcony is the only possibility for me in Moscow.
+<br><br>
+I am going to move the station in my counrty-side compound in the North of Tula region in spring or summer 2009. The station will be install properly there.
+For now I can't move because of absence of power supply there and besides there are some unsolved challenges here - it's necessary to keep appropriate temperature inside the PC box and rain gauge should be kept from freezing during winter. 
+I plan to send data to the server (which will remain in Moscow) over GPRS.
+<br><br>
+The station joined two network - <a href="http://www.wunderground.com">WeatherUnderground</a> (ID = <a href="http://www.wunderground.com/weatherstation/WXDailyHistory.asp?ID=IMOSCOWM4">IMOSCOWM4</a>) è <a href="http://www.awekas.at">AWEKAS</a> (ID = <a href="http://www.awekas.at/en/instrument.php?id=4757">4757</a>).
+<br><br>
+<img src="/weather/photo1.jpg" alt="The station">
+The weather station - main sensors 
+<br>
+<img src="/weather/photo2.jpg" alt="View from outside"> 
+View from outside 
+
+<hr>
+<font size=-1>
+$Id: mystation.html,v 1.1 2008/11/07 12:06:51 boris Exp $<br>
+</body>
+</html>

@@ -1,0 +1,40 @@
+﻿<html>
+<!-- $Id: mystation.html,v 1.8 2009/09/09 09:31:34 boris Exp $ -->
+<head>
+<title>Моя метеостанция</title>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../style.css">
+</head>
+<body>
+<h2 align="center">Моя метеостанция</h2>
+<a href="/en/weather/mystation.html">English</a><br><br>
+Я собрал любительскую метеостанцию по книге Тима Битсона "<a href="http://www.weathertoys.net/weathertoys/main.html">Weather Toys</a>" и установил ее на участке в СНТ "Твой дом" на севере тульской области (заокский район, около д.Покровское).
+Станция состоит из ряда датчиков, подключенных к шине 1-wire (витая пара).
+Контроллер шины - устройство DS9097U - включается в последовательный порт компьютера. Программное обеспечение написано на языке Java. Компьютер работает в ОС Linux.
+<br><br>
+Датчики опрашиваются каждые 30 секунд. Каждые 5 минут усредненные данные (по 10 измерениям) сбрасываются на сервер по протоколу HTTP. 
+<br><br>
+Собранные данные передаются на <a href="http://www.xland.ru">web-сервер</a> для публичного доступа. Данные представлены в виде <a href="index.html">текущих значений</a> и <a href="/1-wire">графиков</a>. Для хранения архива собранных данных используется СУБД MySQL.
+<br><br>
+<b>Основные компоненты:</b>
+<li> датчики температуры; 
+<li> устройство WS-1 для измерения силы и направления ветра;
+<li> <a href="http://www.hobby-boards.com/catalog/product_info.php?cPath=22&products_id=81">устройство</a> для измерения осадков компании RainWise;
+<li> датчики давления и влажности
+<li> <a href="http://www.hobby-boards.com/catalog/product_info.php?products_id=28">контроллер шины 1-wire</a> 
+<br>
+<br>
+Все компоненты приобретены через сайт компании <a href="http://www.hobby-boards.com/catalog/main_page.php">HobbyBoards</a>
+<br>
+<br>
+Станция входит в две сети любительских метеостанций - <a href="http://www.wunderground.com">WeatherUnderground</a> (ID = <a href="http://www.wunderground.com/weatherstation/WXDailyHistory.asp?ID=IU0422U02">IU0422U02</a>) и <a href="http://www.awekas.at">AWEKAS</a> (ID = <a href="http://www.awekas.at/en/instrument.php?id=4757">4757</a>).
+<br><br>
+Внешний вид основных датчиков станции<br>
+<img src="pict0001.jpg" alt="Внешний вид станции"><br> 
+Управляющий компьютер<br>
+<img src="pict0002.jpg" alt="Управляющий компьютер"> 
+
+<hr>
+<font size=-1>
+$Id: mystation.html,v 1.8 2009/09/09 09:31:34 boris Exp $<br>
+</body>
+</html>

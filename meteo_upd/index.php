@@ -95,6 +95,34 @@ rrd_update("$DIR/solar.rrd", array("$ts:$solar"));
 echo "success\n";
 mylog("$ts:$temp2:$dewpoint:$humidity:$rainmm:$dailyrainmm:$presshpa:$wdir:$wspd:$wspdpk");
 
+$subs = [
+    'DAT' => 'date',
+    'TIM' => 'time',
+    'LAT' => 'lats',
+    'LON' => 'lons',
+    'TEM' => 'temp',
+    'BAR' => 'pressmm',
+    'GPS' => 'presshpa',
+    'HUM' => 'humidity',
+    'WNS' => 'wspd',
+    'WNG' => 'wspdpk',
+    'WND' => 'wdir',
+    'SOL' => 'solar',
+    'RAI' => 'rainmm',
+    'DRAI' => 'dailyrainmm',
+    'WRAI' => 'weeklyrainmm',
+    'MRAI' => 'monthlyrainmm',
+    'YRAI' => 'yearlyrainmm',
+    'DPT'  => 'dewpoint',
+    'TS'   => 'ts',
+];
+
+$html = file_get_contents($dir . '/template.html');
+foreach ($subs as $key => $value) {
+    $html = preg_replace("/%%{$key}%%/g", $$value, $html);
+}
+file_put_contents($dir . '/index.html', $html);
+
 //
 //	MySQL update
 //
@@ -203,4 +231,13 @@ function rrd_update($rrdfile, $data)
     }
 
     return 0;
+}
+
+function substitute($template, $subs)
+{
+    $result = $template;
+    foreach ($subs as $key => $value) {
+        $result = preg_replace("//g", $$value, $result);
+    }
+    return $result;
 }

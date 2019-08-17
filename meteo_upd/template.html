@@ -1,0 +1,108 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ru">  
+<head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1251">
+<meta name="description" content="Погода в СНТ &quot;Твой Дом&quot;">
+<title>Погода в СНТ "Твой дом"</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBGkR-S7VrQ-2LD0WXYTZIvOkFgY02ncDY&sensor=false">
+</script>
+
+<script>
+var mySite = new google.maps.LatLng(54+45.72/60,37+31.28/60);
+function initialize()
+{
+var mapProp = {
+  center: mySite,
+  zoom:13,
+  mapTypeId:google.maps.MapTypeId.ROADMAP
+  };
+var map=new google.maps.Map(document.getElementById("googleMap")
+  ,mapProp);
+var marker = new google.maps.Marker({
+	position: mySite
+});  
+
+marker.setMap(map);
+
+var infowindow = new google.maps.InfoWindow({
+  content:"Моя метеостанция"
+  });
+
+infowindow.open(map,marker);
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+</head>
+<body>
+<h2>Погода в СНТ "Твой дом"</h2>
+<b>Текущая погода</b> в точке с координатами:<br>
+Широта: %%LAT%%, Долгота: %%LON%%<br>
+Дата: %%DAT%% Время: %%TIM%%<hr>
+<table>
+<tr><td>Температура, &deg; C:</td><td> %%TEM%%</td></tr>
+<tr><td>Давление, mm рт.ст.:</td><td> %%BAR%% ( %%GPS%% мБар)</td></tr>
+<tr><td>Влажность, %:</td><td> %%HUM%%</td></tr>
+<tr><td>Точка росы, &deg; C:</td><td> %%DPT%%</td></tr>
+<tr><td>Скорость ветра, м/с:</td><td> %%WNS%% (усреднение за 5 минут)</td></tr>
+<tr><td>Скорость ветра в порывах, м/с:</td><td> %%WNG%% (максимальная скорость за 5 минут)</td></tr>
+<tr><td>Направление ветра, &deg;:</td><td> %%WND%%</td></tr>
+<tr><td>Солнечная радиация, %:</td><td> %%SOL%% (100% - солнечный день)</td></tr>
+<tr><td>Осадки, мм/час:</td><td> %%RAI%% (усреднение за 5 минут)</td></tr>
+<tr><td>Осадки, всего за день, мм:</td><td> %%DRAI%% (с 00:00 %%DAT%%)</td></tr>
+<tr><td>Осадки, всего за неделю, мм:</td><td> %%WRAI%% (с 00:00 понедельника)</td></tr>
+<tr><td>Осадки, всего за месяц, мм:</td><td> %%MRAI%% (с 00:00 1-го числа месяца)</td></tr>
+<tr><td>Осадки, всего за год, мм:</td><td> %%YRAI%% (с 00:00 2013/01/01)</td></tr>
+</table>
+<hr>
+Данные получены с помощью <a href="mystation.html">любительской метеостанции</a>, находящейся в СНТ <a href="http://www.snt-tvoydom.ru">"Твой дом"</a>.<br>
+<div id="googleMap" style="width:640px;height:480px;border:1px solid #444;"></div>
+<hr>
+<a href="http://www.wunderground.com/weatherstation/WXDailyHistory.asp?ID=IU0422U02"><img src="http://banners.wunderground.com/cgi-bin/banner/ban/wxBanner?bannertype=WeatherStationCount&amp;weatherstationcount=IU0422U02" height="160" width="163" border="0" alt="Weather Underground PWS IU0422U02"></a>
+<a href="http://www.awekas.at/en/uebersicht.php?nid=128"><img src="http://www.awekas.at/images/awekas-bm1-e.jpg" alt="www.awekas.at" width="468" height="60" border="0"></a>
+<hr>
+<a href="/1-wire">Графики</a> параметров (RRDtool)<br>
+<a href="http://www.awekas.at/en/instrument.php?id=4757">Панель инструментов</a> (сети AWEKAS)
+<hr>
+<p>
+<a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional" height="31" width="88"></a>
+<!-- Yandex.Metrika informer -->
+<a href="http://metrika.yandex.ru/stat/?id=23324551&amp;from=informer"
+target="_blank" rel="nofollow"><img src="//bs.yandex.ru/informer/23324551/3_0_FFE578FF_E6C558FF_0_pageviews"
+style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" onclick="try{Ya.Metrika.informer({i:this,id:23324551,lang:'ru'});return false}catch(e){}"/></a>
+<!-- /Yandex.Metrika informer -->
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter23324551 = new Ya.Metrika({id:23324551,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/23324551" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<a href="http://ping-admin.ru/free_uptime/stat/003bd6ce3de27173de505882f4f82cf13780.html" target="_blank"><img src="http://ping-admin.ru/i/free_uptime/443d3c37d0debd0524de0fbf1e09b57a3780_1.gif" width="88" height="15" border="0" alt="проверить сайт"></a>
+</p>
+<small>
+Page generated: %%TS%%
+</small>
+</body>
+</html>
