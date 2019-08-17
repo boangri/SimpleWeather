@@ -8,9 +8,13 @@ $db_pass = 'toys';
 
 $RRDTOOL = "/usr/bin/rrdtool";
 $DIR = "/var/lib/rrd/1-wire";
+$udir = "/var/www/html/meteo_upd";
 $dir = "/var/www/html/weather";
 $edir = "/var/www/html/en/weather";
 $RCFILE = "$dir/RainCounter";
+
+$lats = "54&deg 45.72'N";
+$lons = "37&deg 31.28'E";
 
 header("Content-type: text/plain");
 
@@ -87,14 +91,11 @@ rrd_update("$DIR/home/weather.rrd",
 rrd_update("$DIR/td/weather.rrd",
     array("$ts:$temp:$dewpoint:$humidity:$rainmm:$presshpa:$wdir:$wspd:$wspdpk:$solar"));
 rrd_update("$DIR/solar.rrd", array("$ts:$solar"));
-//rrd_update("DIR/heater.rrd", array("$ts:$temp3:$low:$high:$secs:$cnt"));
-//rrd_update("$DIR/b1.rrd", array("$ts:$temp23:$low:$high"));
-//$b1der = 10*$temp23;
-//rrd_update("DIR/b1der.rrd", array("$ts:$b1der"));
-//rrd_update("$DIR/heater2.rrd", array("$ts:$temp3:$temp22:$low:$high:$secs:$cnt"));
-echo "success\n";
-mylog("$ts:$temp2:$dewpoint:$humidity:$rainmm:$dailyrainmm:$presshpa:$wdir:$wspd:$wspdpk");
 
+echo "success\n";
+mylog("$ts:$temp2:$humidity:$rainmm:$dailyrainmm:$presshpa:$wdir:$wspd:$wspdpk");
+
+// Generate /weather/index.html
 $subs = [
     'DAT' => 'date',
     'TIM' => 'time',
@@ -117,9 +118,10 @@ $subs = [
     'TS'   => 'ts',
 ];
 
-$html = file_get_contents($dir . '/template.html');
+$html = file_get_contents($udir . '/template.html');
 foreach ($subs as $key => $value) {
-    $html = preg_replace("/%%{$key}%%/g", $$value, $html);
+    mylog("{$key} => {$$value}");
+    $html = preg_replace("/%%{$key}%%/", $$value, $html);
 }
 file_put_contents($dir . '/index.html', $html);
 
@@ -231,13 +233,4 @@ function rrd_update($rrdfile, $data)
     }
 
     return 0;
-}
-
-function substitute($template, $subs)
-{
-    $result = $template;
-    foreach ($subs as $key => $value) {
-        $result = preg_replace("//g", $$value, $result);
-    }
-    return $result;
 }
